@@ -321,6 +321,24 @@ section.block{position:relative;padding:clamp(90px,14vh,160px) clamp(20px,4vw,48
 .pillar h3{font-size:21px;margin-bottom:8px;color:var(--fire-hot)}
 .pillar p{color:var(--ink-dim);font-weight:300;font-size:15.5px}
 
+/* intrare animată — coloana stângă urcă cu blur, în cascadă */
+.m-left>*{opacity:0;transform:translateY(28px);filter:blur(7px);
+  transition:opacity .95s var(--ease),transform 1.05s var(--ease),filter .95s var(--ease)}
+#misiune.in .m-left>*{opacity:1;transform:none;filter:none}
+#misiune.in .m-left>*:nth-child(2){transition-delay:.14s}
+#misiune.in .m-left>*:nth-child(3){transition-delay:.28s}
+#misiune.in .m-left>*:nth-child(4){transition-delay:.42s}
+
+/* pilonii glisează din dreapta, unul după altul, titlul se aprinde */
+.pillar{opacity:0;transform:translateX(46px);filter:blur(6px);
+  transition:opacity .9s var(--ease),transform 1s var(--ease),filter .9s var(--ease)}
+#misiune.in .pillar{opacity:1;transform:none;filter:none}
+#misiune.in .pillar:nth-child(1){transition-delay:.3s}
+#misiune.in .pillar:nth-child(2){transition-delay:.5s}
+#misiune.in .pillar:nth-child(3){transition-delay:.7s}
+.pillar h3{transition:text-shadow 1.2s var(--ease)}
+#misiune.in .pillar h3{text-shadow:0 0 22px rgba(240,164,60,.35)}
+
 /* ═══════════════ ÎNCHIDERE + FOOTER ═══════════════ */
 #closing{
   position:relative;min-height:78svh;display:flex;align-items:center;justify-content:center;
@@ -382,21 +400,6 @@ body.ready .hero-content>.eyebrow{opacity:1;transform:none;transition-delay:.25s
 body.ready .hero-sub{opacity:1;transform:none;transition-delay:.85s}
 body.ready .hero-verse{opacity:1;transform:none;transition-delay:1s}
 body.ready .hero-ctas{opacity:1;transform:none;transition-delay:1.15s}
-
-/* ═══════════════ CITAT TYPEWRITER ═══════════════ */
-#quote{
-  min-height:64svh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;padding:90px 24px;
-  background:radial-gradient(ellipse 55% 60% at 50% 50%,rgba(240,164,60,.06),transparent 70%),var(--bg);
-}
-#quote .eyebrow{display:block;margin-bottom:24px}
-#quote h2{font-size:clamp(34px,6vw,74px);min-height:1.2em}
-.caret{
-  display:inline-block;width:3px;height:.85em;background:var(--fire);
-  margin-left:8px;vertical-align:-.06em;
-  animation:caretBlink 1.05s steps(1) infinite;
-}
-@keyframes caretBlink{50%{opacity:0}}
 
 /* ═══════════════ LINIA TRIBURILOR — PULS CĂLĂTOR ═══════════════ */
 .tribes-line::after{
@@ -506,11 +509,6 @@ body.ready .hero-ctas{opacity:1;transform:none;transition-delay:1.15s}
   </div>
 </section>
 
-<!-- ═══════════════ CITAT TYPEWRITER ═══════════════ -->
-<section id="quote" aria-label="De ce existăm">
-  <span class="eyebrow">De ce existăm</span>
-  <h2><span id="type-target"></span><span class="caret"></span></h2>
-</section>
 
 <!-- ═══════════════ CELE 12 TRIBURI ═══════════════ -->
 <section class="block" id="triburi">
@@ -676,13 +674,13 @@ body.ready .hero-ctas{opacity:1;transform:none;transition-delay:1.15s}
 <section class="block" id="misiune">
   <div class="wrap">
     <div class="misiune-grid">
-      <div class="reveal">
+      <div class="m-left">
         <span class="eyebrow" style="display:block;margin-bottom:18px">De ce existăm</span>
         <h2 style="font-size:clamp(34px,4.5vw,54px);margin-bottom:22px">Crearea unui cadru în care tinerii Îl întâlnesc pe Isus.</h2>
         <p style="color:var(--ink-dim);font-weight:300">Nu un program. O întâlnire. Vrem să ajutăm o generație întreagă să fie trezită de Dumnezeu — o armată de tineri care Îl înalță pe Cristos și duce Evanghelia întregii lumi în această generație. Nu doctrine discutate. Isus trăit.</p>
         <span class="verse">„Sculați-vă și străluciți, căci lumina voastră a venit." — Isaia 60:1</span>
       </div>
-      <div class="pillar-list reveal">
+      <div class="pillar-list">
         <div class="pillar">
           <h3>Prezența lui Dumnezeu</h3>
           <p>Fiecare eveniment este construit în jurul atmosferei sfinte.</p>
@@ -920,6 +918,14 @@ const rObs = new IntersectionObserver(entries => {
 }, { threshold: 0.18 });
 reveals.forEach(r => rObs.observe(r));
 
+/* ═══════════════ MISIUNE — intrare animată ═══════════════ */
+const misiuneEl = document.getElementById('misiune');
+new IntersectionObserver((es, obs) => {
+  es.forEach(e => {
+    if (e.isIntersecting) { misiuneEl.classList.add('in'); obs.unobserve(misiuneEl); }
+  });
+}, { threshold: 0.22 }).observe(misiuneEl);
+
 /* ═══════════════ PARTICULE DE FOC PE HERO ═══════════════ */
 const heroEl = document.getElementById('hero');
 const cv = document.getElementById('embers');
@@ -985,24 +991,6 @@ if (window.matchMedia('(pointer: fine)').matches && !reduceMotion) {
   })();
 }
 
-/* ═══════════════ CITAT TYPEWRITER ═══════════════ */
-/* ✏️ EDITEAZĂ — textul citatului: */
-const QUOTE_TEXT = 'Nu un eveniment. O mișcare.';
-const typeTarget = document.getElementById('type-target');
-let typedOnce = false;
-new IntersectionObserver(es => {
-  es.forEach(e => {
-    if (e.isIntersecting && !typedOnce) {
-      typedOnce = true;
-      if (reduceMotion) { typeTarget.textContent = QUOTE_TEXT; return; }
-      let i = 0;
-      const t = setInterval(() => {
-        typeTarget.textContent = QUOTE_TEXT.slice(0, ++i);
-        if (i >= QUOTE_TEXT.length) clearInterval(t);
-      }, 60);
-    }
-  });
-}, {threshold: 0.6}).observe(document.getElementById('quote'));
 </script>
 </body>
 </html>
