@@ -1,996 +1,198 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="ro" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RiseUp — O generație trezită</title>
-<meta name="description" content="RiseUp — O generație trezită de Dumnezeu. O armată care Îl înalță pe Cristos.">
-<link rel="icon" type="image/jpeg" href="719189483_18103343071854303_7036104165358158788_n.jpg">
-<link rel="apple-touch-icon" href="719189483_18103343071854303_7036104165358158788_n.jpg">
+<title>Rise Up — O generație trezită</title>
+<meta name="description" content="Rise Up — tabără de tineret creștin. O generație trezită de Dumnezeu, o armată care Îl înalță pe Cristos.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
 <!--
-═══════════════════════════════════════════════════════════════════
-  RISEUP — LANDING PAGE
-  ───────────────────────────────────────────────────────────────
-  FIȘIERE NECESARE ÎN ACELAȘI FOLDER:
-  • index.html (acest fișier)
-  • hf_20260611_152554_744e9eda-1367-40b7-86fe... → poza cu stâlpul de foc
-  • hf_20260611_211303_5f8cde4d-657e-4260-960e-78e3b74a638e.mp4 → clipul
-
-  UNDE EDITEZI TEXTELE:
-  • Caută "✏️ EDITEAZĂ" în acest fișier — fiecare zonă de editat
-    e marcată clar cu acest simbol.
-  • Cele 12 triburi: caută "TRIB 1", "TRIB 2" ... "TRIB 12"
-  • Misiunea: caută "SECȚIUNEA MISIUNE"
-═══════════════════════════════════════════════════════════════════
+  ════════════════════════════════════════════════════════════
+  RISE UP — PAGINA PRINCIPALĂ
+  ✏️ Locuri de editat (caută „EDITEAZĂ"):
+   • CLIP HERO  → înlocuiește poza cu clipul în loop
+   • DATA & LOCAȚIE → datele taberei + link Google Maps
+   • ÎNSCRIERE → linkul de înregistrări (când îl ai)
+  ════════════════════════════════════════════════════════════
 -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-/* ═══════════════ TOKENS ═══════════════ */
-:root{
-  --bg:#05060a;
-  --bg-2:#0a0c13;
-  --bg-3:#10131d;
-  --ink:#ece6d8;
-  --ink-dim:#9a937f;
-  --fire:#f0a43c;
-  --fire-hot:#ffd9a0;
-  --bronze:#7a6347;
-  --line:rgba(240,164,60,.22);
-  --display:'Marcellus',serif;
-  --body:'Manrope',sans-serif;
-  --max:1200px;
-  --ease:cubic-bezier(.22,1,.36,1);
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-html,body{background:var(--bg);color-scheme:dark}
-body{
-  font-family:var(--body);
-  color:var(--ink);
-  font-size:17px;
-  line-height:1.65;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-}
-img,video{display:block;max-width:100%}
-a{color:inherit;text-decoration:none}
-::selection{background:var(--fire);color:#0a0c13}
-
-h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.12;letter-spacing:.01em}
-.eyebrow{
-  font-size:12px;letter-spacing:.32em;text-transform:uppercase;
-  color:var(--fire);font-weight:600;
-}
-.verse{
-  font-family:var(--display);font-style:italic;color:var(--ink-dim);
-  font-size:15px;letter-spacing:.02em;
-}
-.btn{
-  display:inline-flex;align-items:center;gap:10px;
-  font-family:var(--body);font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;
-  padding:16px 32px;border-radius:2px;cursor:pointer;
-  transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .35s,color .35s;
-}
-.btn-fire{background:var(--fire);color:#120c04;box-shadow:0 0 0 rgba(240,164,60,0)}
-.btn-fire:hover{transform:translateY(-2px);box-shadow:0 10px 40px rgba(240,164,60,.35)}
-.btn-ghost{border:1px solid rgba(236,230,216,.25);color:var(--ink);background:transparent}
-.btn-ghost:hover{border-color:var(--fire);color:var(--fire-hot)}
-.soon-pill{
-  display:inline-block;font-size:12px;letter-spacing:.26em;text-transform:uppercase;font-weight:600;
-  color:var(--fire-hot);border:1px solid var(--line);padding:14px 30px;border-radius:2px;
-  animation:soonGlow 3s ease-in-out infinite;
-}
-@keyframes soonGlow{
-  0%,100%{box-shadow:0 0 0 rgba(240,164,60,0)}
-  50%{box-shadow:0 0 28px rgba(240,164,60,.22)}
-}
-
-/* ═══════════════ LOADER ═══════════════ */
-#loader{
-  position:fixed;inset:0;z-index:1000;background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;
-  transition:opacity .9s var(--ease),visibility .9s;
-}
-#loader.done{opacity:0;visibility:hidden;pointer-events:none}
-.loader-beam{
-  position:absolute;left:50%;bottom:0;width:2px;height:0;
-  transform:translateX(-50%);
-  background:linear-gradient(to top,var(--fire-hot),var(--fire) 40%,rgba(240,164,60,0));
-  box-shadow:0 0 30px 6px rgba(240,164,60,.45),0 0 90px 20px rgba(240,164,60,.18);
-  animation:beamRise 2s var(--ease) forwards;
-}
-@keyframes beamRise{to{height:100%}}
-.loader-mark{
-  font-family:var(--display);font-size:clamp(28px,4vw,42px);letter-spacing:.42em;
-  text-indent:.42em;color:var(--ink);opacity:0;
-  animation:markIn 1.2s .55s var(--ease) forwards;
-  position:relative;z-index:2;
-}
-@keyframes markIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-.loader-sub{
-  font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--ink-dim);
-  opacity:0;animation:markIn 1.2s .95s var(--ease) forwards;position:relative;z-index:2;
-}
-.loader-progress{
-  position:relative;z-index:2;width:140px;height:1px;background:rgba(236,230,216,.12);
-  overflow:hidden;opacity:0;animation:markIn .8s 1.1s var(--ease) forwards;
-}
-.loader-progress span{
-  display:block;height:100%;width:0;background:var(--fire);
-  transition:width .3s linear;
-}
-
-/* ═══════════════ NAV ═══════════════ */
-#nav{
-  position:fixed;top:0;left:0;right:0;z-index:900;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px clamp(20px,4vw,48px);
-  background:rgba(5,6,10,.72);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
-  border-bottom:1px solid rgba(236,230,216,.07);
-  transform:translateY(-110%);transition:transform .6s var(--ease);
-}
-#nav.show{transform:translateY(0)}
-.nav-logo{font-family:var(--display);font-size:20px;letter-spacing:.3em;text-indent:.3em}
-.nav-links{display:flex;gap:34px;list-style:none}
-.nav-links a{
-  font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--ink-dim);
-  transition:color .3s;
-}
-.nav-links a:hover{color:var(--fire-hot)}
-.nav-cta{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
-  color:var(--fire);border:1px solid var(--line);padding:10px 20px;border-radius:2px;transition:all .3s}
-.nav-cta:hover{background:var(--fire);color:#120c04}
-
-/* hamburger — doar mobil */
-#burger{
-  display:none;position:fixed;top:18px;right:18px;z-index:950;
-  width:48px;height:48px;border:1px solid rgba(236,230,216,.15);border-radius:2px;
-  background:rgba(5,6,10,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-  cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:6px;
-}
-#burger span{width:20px;height:1.5px;background:var(--ink);transition:all .4s var(--ease)}
-#burger.open span:nth-child(1){transform:translateY(7.5px) rotate(45deg)}
-#burger.open span:nth-child(2){opacity:0}
-#burger.open span:nth-child(3){transform:translateY(-7.5px) rotate(-45deg)}
-#mobile-menu{
-  position:fixed;inset:0;z-index:940;background:rgba(5,6,10,.96);
-  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-  opacity:0;visibility:hidden;transition:opacity .5s var(--ease),visibility .5s;
-}
-#mobile-menu.open{opacity:1;visibility:visible}
-#mobile-menu a{
-  font-family:var(--display);font-size:30px;color:var(--ink);padding:12px;
-  opacity:0;transform:translateY(16px);transition:opacity .5s var(--ease),transform .5s var(--ease),color .3s;
-}
-#mobile-menu.open a{opacity:1;transform:translateY(0)}
-#mobile-menu a:hover{color:var(--fire)}
-#mobile-menu a:nth-child(1){transition-delay:.08s}
-#mobile-menu a:nth-child(2){transition-delay:.14s}
-#mobile-menu a:nth-child(3){transition-delay:.2s}
-#mobile-menu a:nth-child(4){transition-delay:.26s}
-#mobile-menu a:nth-child(5){transition-delay:.32s}
-
-/* ═══════════════ HERO (stâlpul de foc + parallax) ═══════════════ */
-#hero{position:relative;height:100svh;min-height:620px;overflow:hidden;display:flex;align-items:flex-end}
-.hero-bg{
-  position:absolute;inset:-12% 0;z-index:1;
-  will-change:transform;
-}
-#hero-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
-.hero-shade{
-  position:absolute;inset:0;z-index:2;
-  background:linear-gradient(to top,var(--bg) 0%,rgba(5,6,10,.55) 28%,rgba(5,6,10,0) 60%);
-}
-.hero-content{
-  position:relative;z-index:3;width:100%;max-width:var(--max);margin:0 auto;
-  padding:0 clamp(20px,4vw,48px) clamp(70px,12vh,130px);
-  will-change:transform,opacity;
-}
-.hero-content .eyebrow{margin-bottom:22px;display:block}
-.hero-content h1{
-  font-size:clamp(64px,11vw,150px);letter-spacing:.06em;line-height:.95;
-  background:linear-gradient(180deg,#fff 20%,var(--fire-hot) 70%,var(--fire));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
-  margin-bottom:26px;
-}
-.hero-sub{max-width:520px;color:var(--ink);font-size:clamp(17px,2vw,20px);font-weight:300;margin-bottom:18px}
-.hero-verse{margin-bottom:40px;display:block}
-.hero-ctas{display:flex;gap:16px;flex-wrap:wrap}
-.scroll-hint{
-  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:3;
-  display:flex;flex-direction:column;align-items:center;gap:10px;
-  font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-dim);
-}
-.scroll-hint::after{
-  content:'';width:1px;height:44px;
-  background:linear-gradient(var(--fire),transparent);
-  animation:hintPulse 2.2s ease-in-out infinite;
-}
-@keyframes hintPulse{0%,100%{opacity:.25}50%{opacity:1}}
-
-/* ═══════════════ VIDEO (tranziția — pornește singur) ═══════════════ */
-#journey{position:relative}
-.journey-sticky{position:relative;height:100svh;overflow:hidden}
-#scrub-video{width:100%;height:100%;object-fit:cover}
-.journey-caption{
-  position:absolute;left:0;right:0;bottom:clamp(40px,9vh,90px);z-index:4;text-align:center;
-  opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease),transform .8s var(--ease);
-  padding:0 24px;
-}
-.journey-caption.visible{opacity:1;transform:translateY(0)}
-.journey-caption .eyebrow{display:block;margin-bottom:12px}
-.journey-caption h2{font-size:clamp(28px,4.5vw,52px)}
-.journey-fade-top,.journey-fade-bottom{position:absolute;left:0;right:0;height:18vh;z-index:3;pointer-events:none}
-.journey-fade-top{top:0;background:linear-gradient(var(--bg),transparent)}
-.journey-fade-bottom{bottom:0;background:linear-gradient(transparent,var(--bg))}
-
-/* ═══════════════ SECȚIUNI GENERALE ═══════════════ */
-section.block{position:relative;padding:clamp(90px,14vh,160px) clamp(20px,4vw,48px)}
-.wrap{max-width:var(--max);margin:0 auto}
-.section-head{max-width:680px;margin-bottom:clamp(50px,8vh,90px)}
-.section-head .eyebrow{display:block;margin-bottom:18px}
-.section-head h2{font-size:clamp(34px,5vw,58px);margin-bottom:20px}
-.section-head p{color:var(--ink-dim);font-weight:300;font-size:18px}
-
-/* ═══════════════ TRIBURI ═══════════════ */
-#triburi{background:linear-gradient(var(--bg),var(--bg-2) 30%,var(--bg))}
-.tribes-line{
-  position:absolute;top:0;bottom:0;left:50%;width:1px;
-  background:linear-gradient(transparent,var(--line) 8%,var(--line) 92%,transparent);
-  pointer-events:none;
-}
-.tribe{
-  position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,90px);
-  align-items:center;padding:clamp(34px,6vh,64px) 0;
-}
-.tribe-node{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-  width:9px;height:9px;border-radius:50%;background:var(--bg);
-  border:1px solid var(--fire);box-shadow:0 0 14px rgba(240,164,60,.5);
-  z-index:2;
-}
-.tribe-num{
-  font-family:var(--display);font-size:clamp(60px,7vw,96px);line-height:1;
-  color:transparent;-webkit-text-stroke:1px rgba(240,164,60,.4);
-  text-align:right;user-select:none;
-}
-.tribe:nth-child(even) .tribe-num{text-align:left;order:2}
-.tribe:nth-child(even) .tribe-body{order:1;text-align:right}
-.tribe-body h3{font-size:clamp(24px,2.8vw,34px);margin-bottom:12px;color:var(--ink)}
-.tribe-body p{color:var(--ink-dim);font-weight:300;max-width:420px}
-.tribe:nth-child(even) .tribe-body p{margin-left:auto}
-.tribe-tag{
-  display:inline-block;font-size:10px;letter-spacing:.26em;text-transform:uppercase;
-  color:var(--fire);border:1px solid var(--line);padding:6px 14px;border-radius:2px;margin-bottom:16px;
-}
-
-/* skeleton shimmer pe triburi — cu crossfade lin */
-.tribe .sk{display:none}
-.tribe.loading .tribe-body>*:not(.sk){display:none}
-.tribe.loading .sk{display:block;border-radius:3px;
-  background:linear-gradient(100deg,var(--bg-3) 35%,#1a1e2b 50%,var(--bg-3) 65%);
-  background-size:240% 100%;animation:shimmer 1.4s linear infinite;
-  transition:opacity .45s var(--ease)}
-.tribe.loading.fading .sk{opacity:0}
-.sk-tag{width:110px;height:24px;margin-bottom:16px}
-.sk-title{width:64%;height:32px;margin-bottom:14px}
-.sk-text{width:90%;height:14px;margin-bottom:9px}
-.sk-text.short{width:55%}
-.tribe.loading:nth-child(even) .sk{margin-left:auto}
-@keyframes shimmer{to{background-position:-140% 0}}
-
-/* intrare cinematică: glisare laterală + blur care se limpezește */
-.tribe .tribe-body>*:not(.sk){
-  opacity:0;transform:translateX(-44px);filter:blur(8px);
-}
-.tribe:nth-child(even) .tribe-body>*:not(.sk){transform:translateX(44px)}
-.tribe.ready .tribe-body>*:not(.sk){
-  opacity:1;transform:translateX(0);filter:blur(0);
-  transition:opacity 1s var(--ease),transform 1.1s var(--ease),filter 1s var(--ease);
-}
-.tribe.ready .tribe-body>*:nth-child(6){transition-delay:.12s}
-.tribe.ready .tribe-body>*:nth-child(7){transition-delay:.24s}
-
-/* numărul roman: alunecă din lateral și prinde contur */
-.tribe-num{transition:none}
-.tribe .tribe-num{opacity:0;transform:translateX(44px) scale(.94);filter:blur(6px)}
-.tribe:nth-child(even) .tribe-num{transform:translateX(-44px) scale(.94)}
-.tribe.ready .tribe-num{
-  opacity:1;transform:translateX(0) scale(1);filter:blur(0);
-  transition:opacity 1.2s var(--ease),transform 1.3s var(--ease),filter 1.2s var(--ease);
-}
-
-/* nodul de pe linie se aprinde cu puls */
-.tribe .tribe-node{transform:translate(-50%,-50%) scale(0)}
-.tribe.ready .tribe-node{animation:nodeIgnite 1s var(--ease) .35s forwards}
-@keyframes nodeIgnite{
-  0%{transform:translate(-50%,-50%) scale(0);box-shadow:0 0 0 rgba(240,164,60,0)}
-  55%{transform:translate(-50%,-50%) scale(1.9);box-shadow:0 0 30px 8px rgba(240,164,60,.75)}
-  100%{transform:translate(-50%,-50%) scale(1);box-shadow:0 0 14px rgba(240,164,60,.5)}
-}
-
-/* ═══════════════ MISIUNE ═══════════════ */
-#misiune{background:var(--bg-2)}
-.misiune-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,7vw,100px);align-items:start}
-.misiune-grid .verse{display:block;margin-top:30px}
-.pillar-list{display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(236,230,216,.08)}
-.pillar{padding:26px 0;border-bottom:1px solid rgba(236,230,216,.08)}
-.pillar h3{font-size:21px;margin-bottom:8px;color:var(--fire-hot)}
-.pillar p{color:var(--ink-dim);font-weight:300;font-size:15.5px}
-
-/* intrare animată — coloana stângă urcă cu blur, în cascadă */
-.m-left>*{opacity:0;transform:translateY(28px);filter:blur(7px);
-  transition:opacity .95s var(--ease),transform 1.05s var(--ease),filter .95s var(--ease)}
-#misiune.in .m-left>*{opacity:1;transform:none;filter:none}
-#misiune.in .m-left>*:nth-child(2){transition-delay:.14s}
-#misiune.in .m-left>*:nth-child(3){transition-delay:.28s}
-#misiune.in .m-left>*:nth-child(4){transition-delay:.42s}
-
-/* pilonii glisează din dreapta, unul după altul, titlul se aprinde */
-.pillar{opacity:0;transform:translateX(46px);filter:blur(6px);
-  transition:opacity .9s var(--ease),transform 1s var(--ease),filter .9s var(--ease)}
-#misiune.in .pillar{opacity:1;transform:none;filter:none}
-#misiune.in .pillar:nth-child(1){transition-delay:.3s}
-#misiune.in .pillar:nth-child(2){transition-delay:.5s}
-#misiune.in .pillar:nth-child(3){transition-delay:.7s}
-.pillar h3{transition:text-shadow 1.2s var(--ease)}
-#misiune.in .pillar h3{text-shadow:0 0 22px rgba(240,164,60,.35)}
-
-/* ═══════════════ ÎNCHIDERE + FOOTER ═══════════════ */
-#closing{
-  position:relative;min-height:78svh;display:flex;align-items:center;justify-content:center;
-  text-align:center;overflow:hidden;
-  background:radial-gradient(ellipse 50% 65% at 50% 0%,rgba(240,164,60,.16),transparent 65%),var(--bg);
-}
-#closing::before{
-  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:1px;height:42%;
-  background:linear-gradient(var(--fire),transparent);
-  box-shadow:0 0 24px 4px rgba(240,164,60,.3);
-}
-#closing .inner{position:relative;z-index:2;padding:0 24px}
-#closing h2{font-size:clamp(42px,7vw,84px);margin-bottom:20px}
-#closing p{color:var(--ink-dim);max-width:480px;margin:0 auto 40px;font-weight:300}
-footer{
-  border-top:1px solid rgba(236,230,216,.07);
-  padding:54px clamp(20px,4vw,48px) 40px;
-}
-.footer-grid{
-  max-width:var(--max);margin:0 auto;display:flex;justify-content:space-between;
-  align-items:flex-start;gap:40px;flex-wrap:wrap;
-}
-.footer-brand{font-family:var(--display);font-size:24px;letter-spacing:.28em;margin-bottom:12px}
-.footer-grid .verse{font-size:13.5px;max-width:300px}
-.footer-col h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-dim);margin-bottom:16px;font-weight:600}
-.footer-col a{display:block;font-size:14.5px;color:var(--ink);opacity:.75;margin-bottom:10px;transition:opacity .3s,color .3s}
-.footer-col a:hover{opacity:1;color:var(--fire-hot)}
-.footer-bottom{
-  max-width:var(--max);margin:46px auto 0;padding-top:24px;
-  border-top:1px solid rgba(236,230,216,.06);
-  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
-  font-size:12.5px;color:var(--ink-dim);
-}
-
-/* ═══════════════ CURSOR CUSTOM (doar desktop) ═══════════════ */
-#cursor{
-  position:fixed;top:0;left:0;width:8px;height:8px;border-radius:50%;
-  background:var(--fire);box-shadow:0 0 14px 3px rgba(240,164,60,.55);
-  pointer-events:none;z-index:1200;opacity:0;
-  transition:width .25s,height .25s,opacity .3s,background .25s,border .25s;
-}
-#cursor.on{opacity:1}
-#cursor.big{width:36px;height:36px;background:transparent;border:1px solid var(--fire);box-shadow:0 0 20px rgba(240,164,60,.3)}
-@media (pointer:coarse){#cursor{display:none}}
-
-/* ═══════════════ PARTICULE DE FOC (hero) ═══════════════ */
-#embers{position:absolute;inset:0;z-index:2;pointer-events:none}
-
-/* ═══════════════ REVEAL TITLU HERO ═══════════════ */
-.h1-mask{overflow:hidden}
-.hero-content h1{transform:translateY(112%);transition:transform 1.25s var(--ease) .35s}
-body.ready .hero-content h1{transform:translateY(0)}
-.hero-content>.eyebrow,.hero-sub,.hero-verse,.hero-ctas{
-  opacity:0;transform:translateY(22px);
-  transition:opacity .9s var(--ease),transform .9s var(--ease);
-}
-body.ready .hero-content>.eyebrow{opacity:1;transform:none;transition-delay:.25s}
-body.ready .hero-sub{opacity:1;transform:none;transition-delay:.85s}
-body.ready .hero-verse{opacity:1;transform:none;transition-delay:1s}
-body.ready .hero-ctas{opacity:1;transform:none;transition-delay:1.15s}
-
-/* ═══════════════ LINIA TRIBURILOR — PULS CĂLĂTOR ═══════════════ */
-.tribes-line::after{
-  content:'';position:absolute;left:-1px;top:-8%;width:3px;height:70px;border-radius:3px;
-  background:linear-gradient(transparent,var(--fire-hot),transparent);
-  box-shadow:0 0 18px 4px rgba(240,164,60,.35);
-  animation:lineTravel 8s linear infinite;
-}
-@keyframes lineTravel{from{top:-8%}to{top:104%}}
-
-/* reveal generic la scroll */
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
-.reveal.in{opacity:1;transform:translateY(0)}
-
-/* ═══════════════ MOBIL ═══════════════ */
-@media (max-width:860px){
-  #nav{display:none}
-  #burger{display:flex}
-  .journey-sticky{height:100svh}
-  #scrub-video{object-position:center}
-  #hero-bg-img{object-position:center 42%}
-  .journey-caption h2{font-size:30px}
-  .hero-content{padding-bottom:175px}
-  .scroll-hint{bottom:12px}
-  .scroll-hint::after{height:26px}
-  .tribes-line{left:24px}
-  .tribe{grid-template-columns:1fr;gap:10px;padding:34px 0 34px 56px}
-  .tribe-node{left:24px}
-  .tribe-num{text-align:left;font-size:44px;-webkit-text-stroke:1px rgba(240,164,60,.5)}
-  .tribe:nth-child(even) .tribe-num{order:0}
-  .tribe:nth-child(even) .tribe-body{order:1;text-align:left}
-  .tribe:nth-child(even) .tribe-body p{margin-left:0}
-  .tribe.loading:nth-child(even) .sk{margin-left:0}
-  .misiune-grid{grid-template-columns:1fr}
-  .hero-ctas .btn{width:100%;justify-content:center}
-}
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
-  html{scroll-behavior:auto}
-}
-</style>
 </head>
 <body>
 
-<div id="cursor" aria-hidden="true"></div>
-
-<!-- ═══════════════ LOADER ═══════════════ -->
-<div id="loader" aria-hidden="true">
-  <div class="loader-beam"></div>
-  <div class="loader-mark">RISEUP</div>
-  <div class="loader-sub">O generație trezită</div>
-  <div class="loader-progress"><span id="loader-bar"></span></div>
-</div>
-
-<!-- ═══════════════ NAV DESKTOP (apare la scroll) ═══════════════ -->
+<!-- ═══════════ NAVBAR ═══════════ -->
 <nav id="nav" aria-label="Navigare principală">
-  <a class="nav-logo" href="#hero">RISEUP</a>
-  <ul class="nav-links">
-    <li><a href="#triburi">Triburile</a></li>
-    <li><a href="#misiune">Misiunea</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
+  <a class="nav-brand" href="index.html" aria-label="Rise Up — acasă">
+    <img class="logo-d" src="logo-dark.png" alt="Rise Up">
+    <img class="logo-l" src="logo-light.png" alt="Rise Up">
+  </a>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Acasă</a></li>
+      <li><a href="index.html#detalii">Detalii</a></li>
+      <li><a href="triburi.html">Triburile</a></li>
+      <li><a href="index.html#misiune">Misiunea</a></li>
+      <li><a href="regulament.html">Regulament</a></li>
+    </ul>
+    <button id="theme-btn" class="theme-btn" aria-label="Schimbă tema">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+    <a class="btn btn-fire" href="index.html#inscriere">Înscrie-te</a>
+  </div>
+  <button id="burger" aria-label="Deschide meniul" aria-expanded="false"><span></span><span></span><span></span></button>
 </nav>
 
-<!-- ═══════════════ HAMBURGER + MENIU MOBIL ═══════════════ -->
-<button id="burger" aria-label="Deschide meniul" aria-expanded="false">
-  <span></span><span></span><span></span>
-</button>
 <div id="mobile-menu">
-  <a href="#hero">Acasă</a>
-  <a href="#triburi">Triburile</a>
-  <a href="#misiune">Misiunea</a>
-  <a href="#contact">Contact</a>
+  <a href="index.html">Acasă</a>
+  <a href="index.html#detalii">Detalii</a>
+  <a href="triburi.html">Triburile</a>
+  <a href="index.html#misiune">Misiunea</a>
+  <a href="regulament.html">Regulament</a>
+  <a class="btn btn-fire m-cta" href="index.html#inscriere">Înscrie-te</a>
 </div>
 
-<!-- ═══════════════ HERO — STÂLPUL DE FOC ═══════════════ -->
+<!-- ═══════════ HERO ═══════════ -->
 <header id="hero">
-  <div class="hero-bg" id="hero-bg">
-    <img id="hero-bg-img" src="hf_20260611_152554_744e9eda-1367-40b7-80f0-b1fb769d1efe.png" alt="Stâlp de foc pe cerul nopții">
+  <div class="hero-media">
+    <!-- ✏️ EDITEAZĂ — CLIP HERO:
+         Când ai clipul (tineri la focul de tabără, volei, jogging) pune-l în acest folder
+         și înlocuiește <img> de mai jos cu:
+         <video src="hero.mp4" poster="hero.jpg" autoplay muted loop playsinline></video> -->
+    <img src="hero.jpg" alt="Tineri privind focul de tabără la apus">
   </div>
-  <div class="hero-shade"></div>
   <canvas id="embers" aria-hidden="true"></canvas>
-  <div class="hero-content" id="hero-content">
-    <span class="eyebrow">Mișcare de Tineret Creștin</span>
-    <div class="h1-mask"><h1>RiseUp</h1></div>
-    <p class="hero-sub">O generație trezită de Dumnezeu. O armată care Îl înalță pe Cristos.</p>
+  <div class="hero-veil"></div>
+  <div class="hero-inner">
+    <span class="pill">✦ Tabără de tineret creștin</span>
+    <h1>Rise <span class="glow">Up</span></h1>
+    <p class="hero-sub">O generație trezită de Dumnezeu. O armată care Îl înalță pe Cristos — în jurul focului, în natură, împreună.</p>
     <span class="verse hero-verse">„Sculați-vă și străluciți, căci lumina voastră a venit." — Isaia 60:1</span>
     <div class="hero-ctas">
-      <a class="btn btn-fire" href="#journey">Descoperă misiunea</a>
+      <a class="btn btn-fire" href="index.html#inscriere">Înscrie-te la tabără</a>
+      <a class="btn btn-ghost" href="index.html#detalii">Vezi detaliile</a>
     </div>
   </div>
-  <div class="scroll-hint">Coboară</div>
+  <div class="scroll-hint">Coboară<i></i></div>
 </header>
 
-<!-- ═══════════════ TRANZIȚIA — VIDEO SCRUB ═══════════════ -->
-<section id="journey" aria-label="Călătoria prin tabără">
-  <div class="journey-sticky">
-    <video id="scrub-video"
-      src="hf_20260611_211303_5f8cde4d-657e-4260-960e-78e3b74a638e.mp4"
-      muted playsinline preload="auto"></video>
-    <div class="journey-fade-top"></div>
-    <div class="journey-fade-bottom"></div>
-    <div class="journey-caption" id="journey-caption">
-      <span class="eyebrow" id="caption-eyebrow"></span>
-      <h2 id="caption-title"></h2>
-    </div>
-  </div>
-</section>
-
-
-<!-- ═══════════════ CELE 12 TRIBURI ═══════════════ -->
-<section class="block" id="triburi">
+<!-- ═══════════ DATA & LOCAȚIE ═══════════ -->
+<section class="block" id="detalii">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow">Apartenența ta</span>
-      <h2>Cele 12 Triburi</h2>
-      <p>Precum Israelul era organizat pe triburi în jurul Cortului Întâlnirii — tu ești în jurul lui Cristos, împreună cu tribul tău.</p>
+      <span class="eyebrow">Când &amp; unde</span>
+      <h2 class="fire-text">Detaliile taberei</h2>
+      <p>Tot ce trebuie să știi ca să fii acolo. Notează-ți datele și pornește la drum.</p>
     </div>
-
-    <div style="position:relative">
-      <div class="tribes-line"></div>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 1 · FOUNDERS ═══ -->
-      <article class="tribe loading" id="trib-1">
-        <div class="tribe-num">I</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Iuda · Leadership</span>
-          <h3>Founders</h3>
-          <p>Tribul-leu, din care vin regii. Cei care pornesc lucruri de la zero — antreprenoriat, leadership, startup-uri și curajul primului pas.</p>
+    <div class="detail-grid">
+      <!-- ✏️ EDITEAZĂ — DATA -->
+      <div class="detail-card reveal d1">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9h18M8 2.5v4M16 2.5v4"/></svg></div>
+        <span class="eyebrow">Perioada</span>
+        <div class="big">14–20 August 2026</div>
+        <p>7 zile de închinare, prietenii și aventură în natură.</p>
+        <div class="detail-meta">
+          <span>Check-in: 14 Aug, ora 16:00</span>
+          <span>Check-out: 20 Aug, ora 12:00</span>
         </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 2 · BUILDERS ═══ -->
-      <article class="tribe loading" id="trib-2">
-        <div class="tribe-num">II</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Simion · Execuție</span>
-          <h3>Builders</h3>
-          <p>Forța care ridică cetăți. Transformă ideea în structură concretă — construcție, inginerie, robotică, arhitectură.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 3 · MENTORS ═══ -->
-      <article class="tribe loading" id="trib-3">
-        <div class="tribe-num">III</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Levi · Formare</span>
-          <h3>Mentors</h3>
-          <p>Tribul preoților și al învățătorilor. Transmit mai departe ce au primit — educație creștină, mentorat, teologie, formare.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 4 · HEALERS ═══ -->
-      <article class="tribe loading" id="trib-4">
-        <div class="tribe-num">IV</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Ruben · Profunzime și milă</span>
-          <h3>Healers</h3>
-          <p>Întâiul-născut. Cei care vindecă și poartă de grijă — medicină, psihologie, consiliere, sănătate mintală, îngrijire.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 5 · VISIONARIES ═══ -->
-      <article class="tribe loading" id="trib-5">
-        <div class="tribe-num">V</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Iosif · Perspectivă</span>
-          <h3>Visionaries</h3>
-          <p>Tâlcuitorul de vise, cel care vede înainte. Anticipează ce urmează — inovație, futurism, R&D, tehnologie emergentă.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 6 · STRATEGISTS ═══ -->
-      <article class="tribe loading" id="trib-6">
-        <div class="tribe-num">VI</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Isahar · Înțelegerea timpurilor</span>
-          <h3>Strategists</h3>
-          <p>Darul înțelegerii vremurilor. Analiștii generației — IT, software, data, AI, cercetare, strategie.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 7 · TRADERS ═══ -->
-      <article class="tribe loading" id="trib-7">
-        <div class="tribe-num">VII</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Zabulon · Simțul pieței</span>
-          <h3>Traders</h3>
-          <p>Țărmul mării și negoțul cu corăbii. Fac schimbul să funcționeze — comerț, vânzări, e-commerce, business.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 8 · CREATORS ═══ -->
-      <article class="tribe loading" id="trib-8">
-        <div class="tribe-num">VIII</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Neftali · Cuvinte frumoase</span>
-          <h3>Creators</h3>
-          <p>Vocile generației — artă vizuală, design, muzică, scris creativ, film, foto, media, jurnalism, comunicare.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 9 · HOSTS ═══ -->
-      <article class="tribe loading" id="trib-9">
-        <div class="tribe-num">IX</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Așer · Generozitate</span>
-          <h3>Hosts</h3>
-          <p>Tribul belșugului și al mesei pline. Primesc oamenii și creează experiențe — hospitality, gastronomie, turism, agricultură.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 10 · ADVOCATES ═══ -->
-      <article class="tribe loading" id="trib-10">
-        <div class="tribe-num">X</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Dan · Echitate</span>
-          <h3>Advocates</h3>
-          <p>Numele lui înseamnă judecător. Apără cauze și oameni — drept, dreptate socială, ONG, activism pentru cei vulnerabili.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 11 · EXPLORERS ═══ -->
-      <article class="tribe loading" id="trib-11">
-        <div class="tribe-num">XI</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Gad · Pionierat</span>
-          <h3>Explorers</h3>
-          <p>Cei care merg primii pe teren necunoscut — aventură, expediții, misiune, pionierat.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
-      <!-- ═══ ✏️ EDITEAZĂ — TRIB 12 · ATHLETES ═══ -->
-      <article class="tribe loading" id="trib-12">
-        <div class="tribe-num">XII</div>
-        <div class="tribe-body">
-          <div class="sk sk-tag"></div><div class="sk sk-title"></div><div class="sk sk-text"></div><div class="sk sk-text short"></div>
-          <span class="tribe-tag">Beniamin · Precizie și forță</span>
-          <h3>Athletes</h3>
-          <p>Arcașii pricepuți. Corpul antrenat ca instrument — sport, performanță fizică, atletism, outdoor, expediții.</p>
-        </div>
-        <div class="tribe-node"></div>
-      </article>
-
+      </div>
+      <!-- ✏️ EDITEAZĂ — LOCAȚIE + LINK GOOGLE MAPS -->
+      <div class="detail-card reveal d2">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg></div>
+        <span class="eyebrow">Locația</span>
+        <h3>Camping IMPACT</h3>
+        <p>În mijlocul naturii, lângă Sibiu — exact unde focul de tabără se vede cel mai bine.</p>
+        <a class="map-link" href="https://www.google.com/maps/place/Camping+IMPACT/@45.6957199,24.9758348,17z/data=!3m1!4b1!4m6!3m5!1s0x4748e933a5f3f1ef:0x7afe7c82536399de!8m2!3d45.6957199!4d24.9758348!16s%2Fg%2F11fy19kldj" target="_blank" rel="noopener">
+          Deschide în Google Maps
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ ✏️ EDITEAZĂ — SECȚIUNEA MISIUNE ═══════════════ -->
+<!-- ═══════════ ÎNSCRIERI ═══════════ -->
+<section class="block" id="inscriere">
+  <div class="wrap">
+    <div class="cta-band reveal">
+      <span class="pill">Locuri limitate</span>
+      <h2 class="fire-text" style="margin-top:18px">Vino la Rise Up</h2>
+      <p>Înainte de înscriere, citește regulamentul taberei. Apoi bifează că ești de acord — abia atunci se deblochează înscrierea.</p>
+
+      <div class="enroll">
+        <a class="btn btn-ghost" href="regulament.html" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h8l4 4v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M14 3v4h4M8 13h8M8 17h6"/></svg>
+          1. Citește regulamentul
+        </a>
+
+        <label class="agree" for="agree-check">
+          <input type="checkbox" id="agree-check">
+          <span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5L20 7"/></svg></span>
+          <span>2. Am citit <a href="regulament.html" target="_blank" rel="noopener">regulamentul</a> și sunt de acord cu regulile.</span>
+        </label>
+
+        <!-- ✏️ EDITEAZĂ — ÎNSCRIERE:
+             Când ai linkul formularului, pune-l în data-href="..." mai jos.
+             Butonul rămâne blocat până când vizitatorul bifează acordul. -->
+        <a class="btn btn-fire" id="enroll-btn" href="#" data-href="https://docs.google.com/forms/d/e/1FAIpQLSfmpwt_XKq-mfD_ZWQbpz2Ijo-nNG1tVET7wrgvqmiXV3Wxog/viewform" target="_blank" rel="noopener" aria-disabled="true">
+          3. Înscrie-te la tabără
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+      </div>
+
+      <p class="cta-note" id="enroll-note">Bifează că ești de acord cu regulamentul ca să poți continua.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MISIUNE ═══════════ -->
 <section class="block" id="misiune">
   <div class="wrap">
-    <div class="misiune-grid">
-      <div class="m-left">
-        <span class="eyebrow" style="display:block;margin-bottom:18px">De ce existăm</span>
-        <h2 style="font-size:clamp(34px,4.5vw,54px);margin-bottom:22px">Crearea unui cadru în care tinerii Îl întâlnesc pe Isus.</h2>
-        <p style="color:var(--ink-dim);font-weight:300">Nu un program. O întâlnire. Vrem să ajutăm o generație întreagă să fie trezită de Dumnezeu — o armată de tineri care Îl înalță pe Cristos și duce Evanghelia întregii lumi în această generație. Nu doctrine discutate. Isus trăit.</p>
+    <div class="mis-grid">
+      <div class="mis-left reveal">
+        <span class="eyebrow">De ce existăm</span>
+        <h2>Un cadru în care tinerii Îl întâlnesc pe Isus.</h2>
+        <p>Nu un program. O întâlnire. Vrem să ajutăm o generație întreagă să fie trezită de Dumnezeu — o armată de tineri care Îl înalță pe Cristos și duce Evanghelia întregii lumi în această generație.</p>
+        <p>Nu doctrine discutate. Isus trăit.</p>
         <span class="verse">„Sculați-vă și străluciți, căci lumina voastră a venit." — Isaia 60:1</span>
       </div>
-      <div class="pillar-list">
-        <div class="pillar">
-          <h3>Prezența lui Dumnezeu</h3>
-          <p>Fiecare eveniment este construit în jurul atmosferei sfinte.</p>
-        </div>
-        <div class="pillar">
-          <h3>Întâlnirea personală cu Isus</h3>
-          <p>Cristos în centru, nu la periferie.</p>
-        </div>
-        <div class="pillar">
-          <h3>Convertirea adevărată</h3>
-          <p>Transformare profundă, nu decizie de moment.</p>
-        </div>
+      <div class="pillars">
+        <div class="pillar reveal d1"><span class="num">01</span><div><h3>Prezența lui Dumnezeu</h3><p>Fiecare moment e construit în jurul atmosferei sfinte.</p></div></div>
+        <div class="pillar reveal d2"><span class="num">02</span><div><h3>Întâlnirea personală cu Isus</h3><p>Cristos în centru, nu la periferie.</p></div></div>
+        <div class="pillar reveal d3"><span class="num">03</span><div><h3>Convertirea adevărată</h3><p>Transformare profundă, nu o decizie de moment.</p></div></div>
+        <div class="pillar reveal d4"><span class="num">04</span><div><h3>Comunitate &amp; triburi</h3><p>Fiecare tânăr aparține unui trib — descoperă-l.</p></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════ ÎNCHIDERE ═══════════════ -->
-<section id="closing">
-  <div class="inner reveal">
-    <span class="eyebrow" style="display:block;margin-bottom:20px">O singură direcție — Cristos</span>
-    <h2>Tu ești RiseUp.</h2>
-    <p>Nu doctrine discutate. Isus trăit.</p>
-    <span class="soon-pill">Curând. Rămâi aproape.</span>
-  </div>
-</section>
-
-<!-- ═══════════════ FOOTER ═══════════════ -->
+<!-- ═══════════ FOOTER ═══════════ -->
 <footer id="contact">
-  <div class="footer-grid">
-    <div>
-      <div class="footer-brand">RISEUP</div>
+  <div class="foot-grid">
+    <div class="foot-col">
+      <div class="foot-brand"><img class="logo-d" src="logo-dark.png" alt="Rise Up"><img class="logo-l" src="logo-light.png" alt="Rise Up"></div>
       <span class="verse">„Sculați-vă și străluciți, căci lumina voastră a venit." — Isaia 60:1</span>
     </div>
-    <div class="footer-col">
+    <div class="foot-col">
       <h4>Explorează</h4>
-      <a href="#triburi">Triburile</a>
-      <a href="#misiune">Misiunea</a>
+      <a href="index.html#detalii">Detalii</a>
+      <a href="triburi.html">Cele 12 Triburi</a>
+      <a href="index.html#misiune">Misiunea</a>
+      <a href="regulament.html">Regulament</a>
     </div>
-    <div class="footer-col">
+    <div class="foot-col">
       <h4>Contact</h4>
-      <a href="mailto:riseupnewgen26@gmail.com">riseupnewgen26@gmail.com</a>
-      <a href="tel:+40758310622">+40 758 310 622</a>
-      <a href="https://www.instagram.com/rise_up_nextgen?igsh=OWN2cGVqcDBndG52" target="_blank" rel="noopener">Instagram</a>
+      <a href="mailto:riseupnewgen26@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>riseupnewgen26@gmail.com</a>
+      <a href="tel:+40758310622"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 4h4l2 5-3 2a12 12 0 0 0 5 5l2-3 5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>+40 758 310 622</a>
+      <a href="https://www.instagram.com/rise_up_nextgen?igsh=OWN2cGVqcDBndG52" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>Instagram</a>
     </div>
   </div>
-  <div class="footer-bottom">
-    <span>© 2026 RiseUp. Toate drepturile rezervate.</span>
+  <div class="foot-bottom">
+    <span>© 2026 Rise Up. Toate drepturile rezervate.</span>
     <span>O generație trezită. O armată care Îl înalță pe Cristos.</span>
   </div>
 </footer>
 
-<script>
-/* ═══════════════ CONFIG FIȘIERE ═══════════════
-   ✏️ Dacă redenumești pozele/clipul, schimbă DOAR aici: */
-const FIRE_IMAGE = 'hf_20260611_152554_744e9eda-1367-40b7-80f0-b1fb769d1efe.png';
-const SCRUB_VIDEO = 'hf_20260611_211303_5f8cde4d-657e-4260-960e-78e3b74a638e.mp4';
-
-document.getElementById('hero-bg-img').src = FIRE_IMAGE;
-document.getElementById('scrub-video').src = SCRUB_VIDEO;
-
-/* ═══════════════ LOADER PREMIUM (min ~2.2s) ═══════════════ */
-const loader = document.getElementById('loader');
-const loaderBar = document.getElementById('loader-bar');
-const loadStart = performance.now();
-const MIN_LOAD = 2200; // 1s extra intenționat — efect premium
-
-let fakeProgress = 0;
-const progTimer = setInterval(() => {
-  fakeProgress = Math.min(fakeProgress + Math.random() * 14, 92);
-  loaderBar.style.width = fakeProgress + '%';
-}, 180);
-
-function finishLoader(){
-  clearInterval(progTimer);
-  loader.classList.add('done');
-  document.body.classList.add('ready'); /* pornește reveal-ul din hero */
-}
-
-window.addEventListener('load', () => {
-  const elapsed = performance.now() - loadStart;
-  const wait = Math.max(0, MIN_LOAD - elapsed);
-  setTimeout(() => {
-    loaderBar.style.width = '100%';
-    setTimeout(finishLoader, 350);
-  }, wait);
-});
-/* fallback: dacă "load" întârzie mult (video mare), ascundem după 6s */
-setTimeout(finishLoader, 6000);
-
-/* ═══════════════ NAV DESKTOP — apare după primul ecran ═══════════════ */
-const nav = document.getElementById('nav');
-let navShown = false;
-function checkNav(){
-  if (!navShown && window.scrollY > window.innerHeight * 0.55) {
-    nav.classList.add('show');
-    navShown = true; // rămâne vizibil
-  } else if (navShown && window.scrollY < 40) {
-    nav.classList.remove('show');
-    navShown = false;
-  }
-}
-window.addEventListener('scroll', checkNav, { passive: true });
-
-/* ═══════════════ MENIU MOBIL ═══════════════ */
-const burger = document.getElementById('burger');
-const mobileMenu = document.getElementById('mobile-menu');
-burger.addEventListener('click', () => {
-  const open = mobileMenu.classList.toggle('open');
-  burger.classList.toggle('open', open);
-  burger.setAttribute('aria-expanded', open);
-  document.body.style.overflow = open ? 'hidden' : '';
-});
-mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-  mobileMenu.classList.remove('open');
-  burger.classList.remove('open');
-  document.body.style.overflow = '';
-}));
-
-/* ═══════════════ PARALLAX HERO ═══════════════ */
-const heroBg = document.getElementById('hero-bg');
-const heroContent = document.getElementById('hero-content');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-function parallax(){
-  if (reduceMotion) return;
-  const y = window.scrollY;
-  const h = window.innerHeight;
-  if (y < h * 1.2) {
-    heroBg.style.transform = `translateY(${y * 0.35}px)`;
-    heroContent.style.transform = `translateY(${y * 0.16}px)`;
-    heroContent.style.opacity = Math.max(0, 1 - y / (h * 0.65));
-  }
-}
-window.addEventListener('scroll', parallax, { passive: true });
-
-/* ═══════════════ VIDEO — pornește singur la scroll + CTA-uri rotative ═══════════════ */
-const scrubVideo = document.getElementById('scrub-video');
-const caption = document.getElementById('journey-caption');
-const capEyebrow = document.getElementById('caption-eyebrow');
-const capTitle = document.getElementById('caption-title');
-
-/* ✏️ EDITEAZĂ — mesajele care apar pe rând peste clip.
-   "at" = momentul apariției, ca fracție din durata clipului (0 → început, 1 → sfârșit) */
-const CAPTIONS = [
-  { at: 0.06, eyebrow: 'Precum Israelul în pustie', title: 'O tabără. Un popor.' },
-  { at: 0.40, eyebrow: 'Apartenența ta',            title: 'Fiecare tânăr are un trib.' },
-  { at: 0.74, eyebrow: 'În centru',                  title: 'Cristos. Mereu în centru.' },
-];
-
-let currentCap = -1;
-let swapping = false;
-
-function showCaption(i){
-  if (i === currentCap || swapping) return;
-  swapping = true;
-  caption.classList.remove('visible');
-  setTimeout(() => {
-    capEyebrow.textContent = CAPTIONS[i].eyebrow;
-    capTitle.textContent = CAPTIONS[i].title;
-    caption.classList.add('visible');
-    currentCap = i;
-    swapping = false;
-  }, currentCap === -1 ? 0 : 450);
-}
-
-scrubVideo.addEventListener('timeupdate', () => {
-  if (!scrubVideo.duration) return;
-  const p = scrubVideo.currentTime / scrubVideo.duration;
-  let idx = 0;
-  for (let i = 0; i < CAPTIONS.length; i++) if (p >= CAPTIONS[i].at) idx = i;
-  if (p >= CAPTIONS[0].at) showCaption(idx);
-});
-
-/* ultimul mesaj rămâne pe ecran după ce se termină clipul */
-scrubVideo.addEventListener('ended', () => showCaption(CAPTIONS.length - 1));
-
-/* clipul pornește de la zero de fiecare dată când reintri în secțiune */
-function resetCaptions(){
-  caption.classList.remove('visible');
-  currentCap = -1;
-  swapping = false;
-}
-
-const vObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      /* restart complet: clip + call-to-action-uri de la început */
-      scrubVideo.pause();
-      scrubVideo.currentTime = 0;
-      resetCaptions();
-      scrubVideo.play().catch(() => {
-        /* dacă browserul blochează autoplay, pornim la prima interacțiune */
-        const kick = () => { scrubVideo.play().catch(()=>{}); };
-        window.addEventListener('touchstart', kick, { once: true });
-        window.addEventListener('scroll', kick, { once: true });
-      });
-    } else {
-      scrubVideo.pause();
-      resetCaptions();
-    }
-  });
-}, { threshold: 0.35 });
-vObs.observe(scrubVideo);
-
-/* ═══════════════ SKELETON → INTRARE CINEMATICĂ (triburi) ═══════════════ */
-const tribes = document.querySelectorAll('.tribe');
-const tObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    tObs.unobserve(e.target);
-    const el = e.target;
-    if (reduceMotion) { el.classList.remove('loading'); el.classList.add('ready'); return; }
-    /* 1. skeleton-ul mai pâlpâie puțin (efectul premium) */
-    setTimeout(() => {
-      /* 2. skeleton-ul se estompează lin */
-      el.classList.add('fading');
-      setTimeout(() => {
-        /* 3. conținutul intră din lateral, cu blur care se limpezește */
-        el.classList.remove('loading', 'fading');
-        void el.offsetHeight; /* forțăm browserul să "vadă" starea inițială */
-        requestAnimationFrame(() => el.classList.add('ready'));
-      }, 440);
-    }, 420);
-  });
-}, { threshold: 0.3 });
-tribes.forEach(t => tObs.observe(t));
-
-/* ═══════════════ REVEAL GENERIC ═══════════════ */
-const reveals = document.querySelectorAll('.reveal');
-const rObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('in'); rObs.unobserve(e.target); }
-  });
-}, { threshold: 0.18 });
-reveals.forEach(r => rObs.observe(r));
-
-/* ═══════════════ MISIUNE — intrare animată ═══════════════ */
-const misiuneEl = document.getElementById('misiune');
-new IntersectionObserver((es, obs) => {
-  es.forEach(e => {
-    if (e.isIntersecting) { misiuneEl.classList.add('in'); obs.unobserve(misiuneEl); }
-  });
-}, { threshold: 0.22 }).observe(misiuneEl);
-
-/* ═══════════════ PARTICULE DE FOC PE HERO ═══════════════ */
-const heroEl = document.getElementById('hero');
-const cv = document.getElementById('embers');
-const ctx = cv.getContext('2d');
-let embersOn = true;
-
-function sizeCanvas(){ cv.width = heroEl.clientWidth; cv.height = heroEl.clientHeight; }
-sizeCanvas();
-window.addEventListener('resize', sizeCanvas);
-
-const EMBER_COUNT = window.innerWidth < 860 ? 22 : 46;
-function spawnEmber(fromBottom){
-  return {
-    x: Math.random() * cv.width,
-    y: fromBottom ? cv.height + 10 : Math.random() * cv.height,
-    r: Math.random() * 1.8 + 0.5,
-    s: Math.random() * 0.55 + 0.2,
-    drift: Math.random() * 0.5 - 0.25,
-    a: Math.random() * 0.45 + 0.15,
-  };
-}
-const embers = Array.from({length: EMBER_COUNT}, () => spawnEmber(false));
-
-function emberTick(){
-  if (embersOn && !reduceMotion) {
-    ctx.clearRect(0, 0, cv.width, cv.height);
-    for (const p of embers) {
-      p.y -= p.s;
-      p.x += p.drift + Math.sin(p.y * 0.012) * 0.18;
-      p.a -= 0.0009;
-      if (p.y < -12 || p.a <= 0) Object.assign(p, spawnEmber(true));
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, 6.283);
-      ctx.fillStyle = `rgba(240,164,60,${p.a})`;
-      ctx.shadowColor = 'rgba(240,164,60,.7)';
-      ctx.shadowBlur = 6;
-      ctx.fill();
-    }
-  }
-  requestAnimationFrame(emberTick);
-}
-emberTick();
-/* oprim particulele când hero iese din ecran — economie de resurse */
-new IntersectionObserver(es => es.forEach(e => embersOn = e.isIntersecting), {threshold: 0})
-  .observe(heroEl);
-
-/* ═══════════════ CURSOR CUSTOM (desktop) ═══════════════ */
-if (window.matchMedia('(pointer: fine)').matches && !reduceMotion) {
-  const cursor = document.getElementById('cursor');
-  let cx = innerWidth/2, cy = innerHeight/2, tx = cx, ty = cy;
-  window.addEventListener('mousemove', e => {
-    tx = e.clientX; ty = e.clientY;
-    cursor.classList.add('on');
-  });
-  document.addEventListener('mouseleave', () => cursor.classList.remove('on'));
-  document.addEventListener('mouseover', e => {
-    cursor.classList.toggle('big', !!e.target.closest('a, button'));
-  });
-  (function curLoop(){
-    cx += (tx - cx) * 0.2; cy += (ty - cy) * 0.2;
-    cursor.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`;
-    requestAnimationFrame(curLoop);
-  })();
-}
-
-</script>
+<script src="main.js"></script>
 </body>
 </html>
