@@ -426,3 +426,32 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none}
 }
+
+/* ═══════════════ GALERIE — COMING SOON ═══════════════ */
+.coming-soon{
+  max-width:640px;margin:0 auto;text-align:center;
+  background:var(--card);border:1px solid var(--card-brd);border-radius:var(--radius);
+  padding:clamp(40px,7vw,72px) clamp(24px,5vw,56px);
+  box-shadow:var(--shadow);
+}
+.coming-soon .cs-ico{
+  width:78px;height:78px;margin:0 auto 26px;border-radius:20px;
+  display:grid;place-items:center;color:var(--fire);
+  background:var(--ember);border:1px solid var(--line);box-shadow:var(--glow);
+}
+.coming-soon .cs-ico svg{width:34px;height:34px}
+.coming-soon h2{font-size:clamp(30px,5vw,50px);margin-bottom:16px}
+.coming-soon p{color:var(--ink-dim);max-width:44ch;margin:0 auto}
+.cs-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+
+/* ═══════════════ GALERIE — GRILĂ (pentru poze) ═══════════════ */
+.gallery-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:14px;
+}
+.gallery-item{
+  overflow:hidden;border-radius:14px;border:1px solid var(--card-brd);
+  aspect-ratio:4/5;background:var(--card);
+}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.gallery-item:hover img{transform:scale(1.06)}
