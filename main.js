@@ -43,7 +43,16 @@
   const agree = document.getElementById('agree-check');
   const enrollBtn = document.getElementById('enroll-btn');
   const enrollNote = document.getElementById('enroll-note');
-  if (agree && enrollBtn && enrollNote){
+  const enrollClosed = enrollBtn && enrollBtn.dataset.closed === 'true';
+  if (enrollClosed){
+    /* Înscrieri închise: butonul rămâne blocat, oricât ai bifa. */
+    enrollBtn.setAttribute('aria-disabled', 'true');
+    enrollBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      enrollNote.textContent = 'Înscrierile s-au încheiat. Ne vedem la ediția următoare! 🔥';
+      enrollNote.style.color = 'var(--fire)';
+    });
+  } else if (agree && enrollBtn && enrollNote){
     agree.addEventListener('change', () => {
       const ok = agree.checked;
       enrollBtn.setAttribute('aria-disabled', String(!ok));
