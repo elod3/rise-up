@@ -592,3 +592,15 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
   .up-rand{grid-template-columns:1fr;gap:8px}
   .up-bara{width:100%}
 }
+
+/* Acțiunile din lightbox (descarcă / șterge) */
+.lb-actiuni{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+  display:flex;gap:12px;align-items:center;
+}
+.lb-actiuni .btn{white-space:nowrap}
+.lb-sterge-sigur{border-color:#c0392b!important;color:#e07a6b!important}
+@media(max-width:640px){
+  .lb-actiuni{bottom:14px;width:calc(100% - 24px);justify-content:center}
+  .lb-actiuni .btn{padding:13px 20px;font-size:12.5px}
+}

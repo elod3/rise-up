@@ -30,7 +30,11 @@ export default {
     }
 
     if (request.method === 'GET' && url.pathname.startsWith('/f/')) {
-      return serveste(url.pathname.slice(3), env);
+      return serveste(url.pathname.slice(3), env, url.searchParams);
+    }
+
+    if (request.method === 'DELETE' && url.pathname.startsWith('/f/')) {
+      return sterge(request, url.pathname.slice(3), env, cors);
     }
 
     if (url.pathname === '/health') {
@@ -109,7 +113,7 @@ async function verificaFotograf(token, env) {
 
 /* ─────────── SERVIT ─────────── */
 
-async function serveste(cheie, env) {
+async function serveste(cheie, env, parametri) {
   const obiect = await env.BUCKET.get(cheie);
   if (!obiect) return new Response('Poza nu exista', { status: 404 });
 
@@ -118,7 +122,29 @@ async function serveste(cheie, env) {
   h.set('etag', obiect.httpEtag);
   h.set('Cache-Control', 'public, max-age=31536000, immutable');
   h.set('Access-Control-Allow-Origin', '*'); // pozele sunt publice
+
+  // Cu ?dl=1 fortam descarcarea in loc de deschidere in tab.
+  // Atributul "download" din HTML nu functioneaza intre domenii diferite,
+  // deci descarcarea trebuie ceruta de server, nu de pagina.
+  if (parametri?.get('dl')) {
+    const nume = (parametri.get('nume') || cheie.split('/').pop()).replace(/[^\w.\-]/g, '_');
+    h.set('Content-Disposition', `attachment; filename="${nume}"`);
+    h.delete('Cache-Control');
+  }
+
   return new Response(obiect.body, { headers: h });
+}
+
+/** Sterge o poza din R2. Doar fotograful are voie. */
+async function sterge(request, cheie, env, cors) {
+  const token = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
+  if (!token) return json({ error: 'Trebuie sa fii logat.' }, 401, cors);
+
+  const user = await verificaFotograf(token, env);
+  if (!user.ok) return json({ error: user.motiv }, user.status, cors);
+
+  await env.BUCKET.delete(cheie);
+  return json({ sters: cheie }, 200, cors);
 }
 
 /* ─────────── AJUTOARE ─────────── */
@@ -128,7 +154,7 @@ function anteturiCors(request, env) {
   const origine = request.headers.get('Origin') || '';
   return {
     'Access-Control-Allow-Origin': permise.includes(origine) ? origine : permise[0] || '',
-    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+    'Access-Control-Allow-Methods': 'POST, GET, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Authorization, Content-Type',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin',

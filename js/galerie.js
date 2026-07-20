@@ -8,7 +8,7 @@
  * pagina — nu trebuie sa editezi nimic manual in ziua taberei.
  */
 
-import { sb } from './login-ascuns.js';
+import { sb, esteFotograf } from './login-ascuns.js';
 import { WORKER_URL } from './config.js';
 
 const comingSoon = document.querySelector('.coming-soon')?.closest('section');
@@ -16,6 +16,7 @@ const sectiune   = document.getElementById('galerie-reala');
 const grid       = document.getElementById('galerie-grid');
 
 let poze = [];
+let potSterge = false;   // devine true daca fotograful e logat
 
 /** Calea din R2 → adresa completa. Construita aici, nu salvata in baza. */
 const adresa = (cheie) => `${WORKER_URL}/f/${cheie}`;
@@ -30,6 +31,7 @@ async function incarca() {
 
   if (error) { console.error('[galerie]', error.message); return; }
   poze = data || [];
+  potSterge = await esteFotograf().catch(() => false);
   deseneaza();
   asculta();
 }
@@ -63,6 +65,10 @@ function asculta() {
       poze.unshift(m.new);
       deseneaza();
     })
+    .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'photos' }, (m) => {
+      poze = poze.filter((p) => p.id !== m.old.id);
+      deseneaza();
+    })
     .subscribe();
 }
 
@@ -78,7 +84,10 @@ function lightbox(pozitia) {
     <button class="lb-nav lb-inapoi" aria-label="Poza anterioară">&#8249;</button>
     <figure class="lb-cadru"><img alt="Rise Up"></figure>
     <button class="lb-nav lb-inainte" aria-label="Poza următoare">&#8250;</button>
-    <a class="btn btn-fire lb-descarca" download>Descarcă</a>`;
+    <div class="lb-actiuni">
+      <a class="btn btn-fire lb-descarca">Descarcă</a>
+      ${potSterge ? '<button class="btn btn-ghost lb-sterge">Șterge</button>' : ''}
+    </div>`;
   document.body.appendChild(box);
   document.body.style.overflow = 'hidden';
 
@@ -87,11 +96,13 @@ function lightbox(pozitia) {
 
   const arata = () => {
     const p = poze[i];
-    const plin = adresa(p.storage_key);
-    img.src = plin;
-    link.href = plin;
+    img.src = adresa(p.storage_key);
+
+    // Descarcarea o cere Worker-ul prin ?dl=1 — atributul "download" din
+    // HTML e ignorat de browser cand fisierul vine de pe alt domeniu.
     const ext = p.storage_key.split('.').pop() || 'jpg';
-    link.download = `rise-up-${(p.created_at || '').slice(0, 10)}-${p.id.slice(0, 8)}.${ext}`;
+    const nume = `rise-up-${(p.created_at || '').slice(0, 10)}-${p.id.slice(0, 8)}.${ext}`;
+    link.href = `${adresa(p.storage_key)}?dl=1&nume=${encodeURIComponent(nume)}`;
   };
   const muta = (d) => { i = (i + d + poze.length) % poze.length; arata(); };
   const inchide = () => {
@@ -111,5 +122,62 @@ function lightbox(pozitia) {
   box.onclick = (e) => { if (e.target === box) inchide(); };
   document.addEventListener('keydown', taste);
 
+  // Stergere — doar pentru fotograf, si numai dupa o confirmare.
+  const btnSterge = box.querySelector('.lb-sterge');
+  if (btnSterge) {
+    let sigur = false;
+    btnSterge.onclick = async () => {
+      if (!sigur) {
+        sigur = true;
+        btnSterge.textContent = 'Sigur? Apasă din nou';
+        btnSterge.classList.add('lb-sterge-sigur');
+        setTimeout(() => {
+          sigur = false;
+          btnSterge.textContent = 'Șterge';
+          btnSterge.classList.remove('lb-sterge-sigur');
+        }, 4000);
+        return;
+      }
+      btnSterge.disabled = true;
+      btnSterge.textContent = 'Se șterge…';
+      try {
+        await stergePoza(poze[i]);          // scoate poza si din lista
+        if (!poze.length) { inchide(); return; }   // era ultima din galerie
+        i = i % poze.length;                // daca era ultima, sarim la prima
+        arata();
+        btnSterge.disabled = false;
+        btnSterge.textContent = 'Șterge';
+        btnSterge.classList.remove('lb-sterge-sigur');
+        sigur = false;
+      } catch (e) {
+        btnSterge.textContent = 'Eroare: ' + e.message;
+        btnSterge.disabled = false;
+      }
+    };
+  }
+
   arata();
+}
+
+/**
+ * Sterge o poza: intai fisierele din R2, apoi randul din baza.
+ * In ordinea asta — daca pica stergerea din R2, randul ramane si
+ * poza e in continuare vizibila, deci putem reincerca. Invers am
+ * ramane cu fisiere orfane in bucket, invizibile si de negasit.
+ */
+async function stergePoza(p) {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) throw new Error('sesiune expirată');
+
+  const antet = { Authorization: `Bearer ${session.access_token}` };
+  for (const cheie of [p.storage_key, p.thumb_key].filter(Boolean)) {
+    const r = await fetch(adresa(cheie), { method: 'DELETE', headers: antet });
+    if (!r.ok) throw new Error(`nu s-a putut șterge fișierul (${r.status})`);
+  }
+
+  const { error } = await sb.from('photos').delete().eq('id', p.id);
+  if (error) throw new Error(error.message);
+
+  poze = poze.filter((x) => x.id !== p.id);
+  deseneaza();
 }
