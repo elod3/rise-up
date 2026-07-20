@@ -14,4 +14,4 @@ const local = ['localhost', '127.0.0.1'].includes(location.hostname);
 
 export const WORKER_URL = local
   ? 'http://localhost:8787'
-  : 'https://rise-up-galerie.PLACEHOLDER.workers.dev';  // ← completat la deploy
+  : 'https://rise-up-galerie.riseupmovement.workers.dev';
