@@ -189,8 +189,11 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
       ${p.day_tag ? `<span>${p.day_tag}</span>` : ''}`;
     detalii.hidden = false;
     inchideMeniu();
-    setTimeout(() => { detalii.hidden = true; }, 5000);
   };
+
+  // Panoul de detalii sta deasupra poze, deci gestul de pe scena nu-l
+  // prinde — il inchidem si la tap direct pe el.
+  detalii.onclick = () => { detalii.hidden = true; };
 
   const opSterge = box.querySelector('.vz-op-sterge');
   if (opSterge) {
@@ -228,12 +231,14 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
   let pinch0 = 0, scara0 = 1;
   let apucat = false, ax = 0, ay = 0, tx0 = 0, ty0 = 0;
   let ultimulTap = 0, miscat = false;
+  let panouDeschis = false;   // era meniul/detaliile deschise cand ai apasat?
 
   const prinde = (v) => Math.min(ZOOM_MAX, Math.max(1, v));
 
   function laApasare(e) {
     degete.set(e.pointerId, { x: e.clientX, y: e.clientY });
     miscat = false;
+    panouDeschis = !meniu.hidden || !detalii.hidden;
 
     if (degete.size === 2) {
       const [a, b] = [...degete.values()];
@@ -312,6 +317,14 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
     const dy = e.clientY - ay;
 
     if (!miscat) {                    // a fost un tap, nu o tragere
+      // Daca era deschis meniul sau panoul de detalii, tap-ul oriunde
+      // pe poza doar il inchide — nu ascunde si butoanele de sus.
+      if (panouDeschis) {
+        inchideMeniu();
+        detalii.hidden = true;
+        panouDeschis = false;
+        return;
+      }
       const acum = Date.now();
       if (acum - ultimulTap < 300) {  // dublu-tap → zoom acolo unde ai apasat
         ultimulTap = 0;
@@ -367,12 +380,6 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
     limiteaza();
     aplica();
   }, { passive: false });
-
-  /* click pe fundal / in afara meniului */
-  box.querySelector('.vz-fundal').onclick = inchide;
-  box.addEventListener('click', (e) => {
-    if (!meniu.hidden && !meniu.contains(e.target) && e.target !== btnMeniu) inchideMeniu();
-  });
 
   arata();
   return { inchide };
