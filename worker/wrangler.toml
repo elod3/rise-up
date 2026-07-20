@@ -1,0 +1,16 @@
+name = "rise-up-galerie"
+main = "src/worker.js"
+compatibility_date = "2026-07-01"
+
+# Bucket-ul R2 legat direct la Worker — fara chei de acces.
+[[r2_buckets]]
+binding     = "BUCKET"
+bucket_name = "tabara"
+
+# Toate astea sunt PUBLICE (ajung oricum in JS-ul site-ului).
+# Nu exista niciun secret in acest Worker.
+[vars]
+SUPABASE_URL      = "https://svrvfeuhhjldrunqotie.supabase.co"
+SUPABASE_ANON_KEY = "sb_publishable_EpJDq0ODwiw3bE4Ce38RrQ_2GXcG4Rg"
+ALLOWED_ORIGINS   = "https://riseupmovement.ro,http://riseupmovement.ro,https://elod3.github.io,http://localhost:8000,http://127.0.0.1:8000"
+MAX_BYTES         = "52428800"

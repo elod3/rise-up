@@ -1,0 +1,5 @@
+{
+  "name": "rise-up-galerie-worker",
+  "private": true,
+  "devDependencies": { "wrangler": "^4.112.0" }
+}

@@ -1,0 +1,12 @@
+# Secrete — NU ajung niciodată pe GitHub
+.env
+.env.*
+.dev.vars
+.secrets
+
+# Node
+node_modules/
+.wrangler/
+
+# Sistem
+.DS_Store
