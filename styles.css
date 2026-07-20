@@ -640,6 +640,11 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
 .db-logout svg{width:19px;height:19px}
 .db-logout:hover{border-color:#c0392b;color:#e07a6b;transform:translateY(-2px)}
 
+/* Atributul hidden vine din foaia browserului, deci orice
+   "display:flex" scris de noi il bate si elementul ramane vizibil.
+   Regula asta il face sa functioneze din nou peste tot. */
+[hidden]{display:none!important}
+
 /* ═══════════════════════════════════════════════════════════════
    VIZUALIZATOR FOTO — pe tot ecranul, ca galeria din telefon
    z-index 1000: peste navbar (900), altfel bara de sus ar rămâne
