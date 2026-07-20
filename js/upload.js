@@ -12,6 +12,7 @@
 
 import { sb, esteFotograf } from './login-ascuns.js';
 import { WORKER_URL } from './config.js';
+import { porneste as porneteDashboard, reincarca as reincarcaDashboard } from './dashboard.js';
 
 const PARALEL   = 3;
 const THUMB_MAX = 600;   // px pe latura lunga
@@ -41,6 +42,8 @@ if (!session || !(await esteFotograf())) {
 
 document.getElementById('cine').textContent = session.user.email;
 iesire.onclick = async () => { await sb.auth.signOut(); location.href = 'index.html'; };
+
+await porneteDashboard();
 
 /* ─────────── PRIMIREA FISIERELOR ─────────── */
 

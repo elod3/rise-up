@@ -100,3 +100,33 @@ export async function esteFotograf() {
   const { data } = await sb.from('profiles').select('role').limit(1).maybeSingle();
   return data?.role === 'photographer';
 }
+
+/**
+ * Daca fotograful e logat, ii punem un link "Dashboard" in meniu.
+ * Vizitatorii obisnuiti nu-l primesc niciodata — linkul nici macar
+ * nu exista in HTML, se adauga din JS doar dupa ce verificam rolul.
+ *
+ * Sesiunea se pastreaza in browser, deci ramane logat si maine.
+ */
+(async function linkDashboard() {
+  if (location.pathname.endsWith('upload.html')) return;   // e deja acolo
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session || !(await esteFotograf())) return;
+
+  const meniu = document.querySelector('.nav-links');
+  if (meniu && !meniu.querySelector('.nav-dashboard')) {
+    const li = document.createElement('li');
+    li.innerHTML = '<a class="nav-dashboard" href="upload.html">Dashboard</a>';
+    meniu.appendChild(li);
+  }
+
+  const mobil = document.getElementById('mobile-menu');
+  if (mobil && !mobil.querySelector('.nav-dashboard')) {
+    const a = document.createElement('a');
+    a.className = 'nav-dashboard';
+    a.href = 'upload.html';
+    a.textContent = 'Dashboard';
+    mobil.insertBefore(a, mobil.querySelector('.m-cta'));
+  }
+})();

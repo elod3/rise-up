@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Încarcă poze — Rise Up</title>
+<title>Dashboard foto — Rise Up</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="stylesheet" href="styles.css">
@@ -34,8 +34,8 @@
 
 <header class="page-head">
   <span class="pill">Zonă fotograf</span>
-  <h1 class="fire-text">Încarcă pozele</h1>
-  <p>Trage pozele în zona de mai jos sau dă click ca să le alegi. Apar în galerie imediat.</p>
+  <h1 class="fire-text">Dashboard foto</h1>
+  <p>Urcă poze noi sau administrează-le pe cele din galerie.</p>
 </header>
 
 <section class="block" style="padding-top:0">
@@ -58,6 +58,27 @@
     <p class="up-numar" id="stare"></p>
     <ul class="up-lista" id="lista"></ul>
 
+  </div>
+</section>
+
+<!-- ═══════════ DASHBOARD — pozele deja urcate ═══════════ -->
+<section class="block" id="dashboard" style="padding-top:0">
+  <div class="wrap up-wrap">
+    <div class="db-cap">
+      <h2 class="fire-text">Pozele din galerie</h2>
+      <p class="db-numar" id="db-numar">Se încarcă…</p>
+    </div>
+
+    <div class="db-unelte">
+      <button class="btn btn-ghost db-mic" id="db-toate">Selectează tot</button>
+      <div class="db-bara" id="db-bara" hidden>
+        <button class="btn btn-ghost db-mic db-sterge-alese" id="db-sterge-alese">Șterge selectate</button>
+      </div>
+    </div>
+
+    <p class="db-ajutor">Scrie în căsuța de sub fiecare poză ca să-i pui o etichetă (ex: „Ziua 1"). Se salvează singură.</p>
+
+    <div class="db-grila" id="db-grila"></div>
   </div>
 </section>
 
