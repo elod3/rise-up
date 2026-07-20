@@ -10,6 +10,23 @@
  * niciun secret aici — verificarea o face Supabase, noi doar intrebam.
  */
 
+/** IP-ul real al vizitatorului, pus de Cloudflare. */
+const ipul = (r) => r.headers.get('CF-Connecting-IP') || 'necunoscut';
+
+/**
+ * Un token Supabase are trei bucati separate prin punct. Verificam
+ * forma INAINTE sa intrebam Supabase — asa, cineva care trimite gunoi
+ * primeste 401 direct de la noi, fara sa apuce sa bata la usa bazei.
+ */
+const paresTokenValid = (t) => /^[\w-]+\.[\w-]+\.[\w-]+$/.test(t);
+
+/**
+ * Tinem minte 60 de secunde ca un token e al fotografului, ca sa nu
+ * intrebam Supabase la fiecare poza dintr-un lot de 300.
+ */
+const tinereMinte = new Map();
+const CACHE_MS = 60_000;
+
 const TIPURI_OK = [
   'image/jpeg', 'image/png', 'image/webp',
   'image/heic', 'image/heif', 'image/gif', 'image/avif',
@@ -25,16 +42,21 @@ export default {
       return new Response(null, { status: 204, headers: cors });
     }
 
+    const ip = ipul(request);
+
     if (request.method === 'POST' && url.pathname === '/upload') {
-      return incarca(request, env, cors);
+      if (!(await subLimita(env.LIMITA_UPLOAD, ip))) return preaMulte(cors);
+      return incarca(request, env, cors, ip);
     }
 
     if (request.method === 'GET' && url.pathname.startsWith('/f/')) {
+      if (!(await subLimita(env.LIMITA_CITIRE, ip))) return preaMulte(cors);
       return serveste(url.pathname.slice(3), env, url.searchParams);
     }
 
     if (request.method === 'DELETE' && url.pathname.startsWith('/f/')) {
-      return sterge(request, url.pathname.slice(3), env, cors);
+      if (!(await subLimita(env.LIMITA_UPLOAD, ip))) return preaMulte(cors);
+      return sterge(request, url.pathname.slice(3), env, cors, ip);
     }
 
     if (url.pathname === '/health') {
@@ -47,13 +69,13 @@ export default {
 
 /* ─────────── UPLOAD ─────────── */
 
-async function incarca(request, env, cors) {
+async function incarca(request, env, cors, ip) {
   // 1. Are token?
   const token = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
   if (!token) return json({ error: 'Trebuie sa fii logat.' }, 401, cors);
 
   // 2. E fotograf? (intrebam Supabase, nu ne bazam pe ce zice clientul)
-  const user = await verificaFotograf(token, env);
+  const user = await verificaFotograf(token, env, ip);
   if (!user.ok) return json({ error: user.motiv }, user.status, cors);
 
   // 3. Fisierul e acceptabil?
@@ -95,7 +117,21 @@ async function incarca(request, env, cors) {
  * ii da voie sa-si citeasca doar propriul rand. Deci nici aici nu avem
  * nevoie de vreun secret.
  */
-async function verificaFotograf(token, env) {
+async function verificaFotograf(token, env, ip) {
+  // Gunoi evident → il oprim aici, nu deranjam Supabase.
+  if (!paresTokenValid(token)) {
+    return { ok: false, status: 401, motiv: 'Sesiune invalida.' };
+  }
+
+  const stiut = tinereMinte.get(token);
+  if (stiut && stiut.pana > Date.now()) return { ok: true, id: stiut.id };
+
+  // Un token nevalid costa o cerere catre Supabase, deci limitam
+  // separat cate esecuri acceptam de la un IP.
+  if (!(await subLimita(env.LIMITA_AUTH, ip))) {
+    return { ok: false, status: 429, motiv: 'Prea multe incercari. Asteapta un minut.' };
+  }
+
   const h = { apikey: env.SUPABASE_ANON_KEY, Authorization: `Bearer ${token}` };
 
   const r = await fetch(`${env.SUPABASE_URL}/auth/v1/user`, { headers: h });
@@ -108,7 +144,28 @@ async function verificaFotograf(token, env) {
     return { ok: false, status: 403, motiv: 'Contul tau nu are drept de incarcare.' };
   }
 
+  tinereMinte.set(token, { id: u.id, pana: Date.now() + CACHE_MS });
+  if (tinereMinte.size > 50) tinereMinte.clear();   // nu lasam sa creasca la nesfarsit
+
   return { ok: true, id: u.id };
+}
+
+/** Cloudflare ne spune daca IP-ul asta a depasit limita. */
+async function subLimita(limitator, ip) {
+  if (!limitator) return true;              // in dev local nu exista binding-ul
+  try {
+    const { success } = await limitator.limit({ key: ip });
+    return success;
+  } catch {
+    return true;                            // daca limitatorul cade, nu blocam site-ul
+  }
+}
+
+function preaMulte(cors) {
+  return new Response(
+    JSON.stringify({ error: 'Prea multe cereri. Incearca peste un minut.' }),
+    { status: 429, headers: { ...cors, 'Content-Type': 'application/json', 'Retry-After': '60' } },
+  );
 }
 
 /* ─────────── SERVIT ─────────── */
@@ -136,11 +193,11 @@ async function serveste(cheie, env, parametri) {
 }
 
 /** Sterge o poza din R2. Doar fotograful are voie. */
-async function sterge(request, cheie, env, cors) {
+async function sterge(request, cheie, env, cors, ip) {
   const token = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
   if (!token) return json({ error: 'Trebuie sa fii logat.' }, 401, cors);
 
-  const user = await verificaFotograf(token, env);
+  const user = await verificaFotograf(token, env, ip);
   if (!user.ok) return json({ error: user.motiv }, user.status, cors);
 
   await env.BUCKET.delete(cheie);

@@ -14,3 +14,29 @@ SUPABASE_URL      = "https://svrvfeuhhjldrunqotie.supabase.co"
 SUPABASE_ANON_KEY = "sb_publishable_EpJDq0ODwiw3bE4Ce38RrQ_2GXcG4Rg"
 ALLOWED_ORIGINS   = "https://riseupmovement.ro,http://riseupmovement.ro,https://elod3.github.io,http://localhost:8000,http://127.0.0.1:8000"
 MAX_BYTES         = "52428800"
+
+# ─── Rate limiting nativ Cloudflare (gratis, la marginea retelei) ───
+# Se aplica INAINTE sa ajungem la Supabase, deci un bot nu ne poate
+# folosi Worker-ul ca sa bombardeze baza de date.
+
+[[unsafe.bindings]]
+# Fiecare poza = 2 cereri (original + miniatura), iar fotograful urca
+# in loturi mari. Limita asta e doar o plasa de siguranta pentru cazul
+# in care contul lui ar fi compromis — un strain nici nu ajunge aici,
+# il opreste LIMITA_AUTH mai jos.
+name = "LIMITA_UPLOAD"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 200, period = 60 }
+
+[[unsafe.bindings]]
+name = "LIMITA_AUTH"            # incercari cu token invalid: foarte strict
+type = "ratelimit"
+namespace_id = "1002"
+simple = { limit = 10, period = 60 }
+
+[[unsafe.bindings]]
+name = "LIMITA_CITIRE"          # vizionarea pozelor: larg, sa nu deranjam vizitatorii
+type = "ratelimit"
+namespace_id = "1003"
+simple = { limit = 600, period = 60 }
