@@ -67,6 +67,9 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
 
   document.body.appendChild(box);
   document.body.style.overflow = 'hidden';
+  // Ascundem navbarul explicit. Doar z-index-ul nu ajunge: bara are
+  // backdrop-filter, deci se vedea prin fundalul semi-transparent.
+  document.documentElement.classList.add('vz-activ');
   requestAnimationFrame(() => box.classList.add('vz-deschis'));
 
   const scena     = box.querySelector('.vz-scena');
@@ -145,7 +148,11 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
   const inchide = () => {
     box.classList.remove('vz-deschis');
     document.body.style.overflow = '';
+    document.documentElement.classList.remove('vz-activ');
     document.removeEventListener('keydown', taste);
+    window.removeEventListener('pointermove', laMiscare);
+    window.removeEventListener('pointerup', ridicat);
+    window.removeEventListener('pointercancel', ridicat);
     setTimeout(() => box.remove(), 260);
   };
 
@@ -222,9 +229,10 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
   let apucat = false, ax = 0, ay = 0, tx0 = 0, ty0 = 0;
   let ultimulTap = 0, miscat = false;
 
-  scena.addEventListener('pointerdown', (e) => {
+  const prinde = (v) => Math.min(ZOOM_MAX, Math.max(1, v));
+
+  function laApasare(e) {
     degete.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    scena.setPointerCapture(e.pointerId);
     miscat = false;
 
     if (degete.size === 2) {
@@ -238,18 +246,20 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
       tx0 = tx; ty0 = ty;
       img.style.transition = 'none';
     }
-  });
+  }
 
-  scena.addEventListener('pointermove', (e) => {
+  function laMiscare(e) {
     if (!degete.has(e.pointerId)) return;
+    if (e.cancelable) e.preventDefault();
     degete.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
     /* — pinch cu doua degete — */
-    if (degete.size === 2) {
+    if (degete.size >= 2) {
       const [a, b] = [...degete.values()];
       const acum = Math.hypot(b.x - a.x, b.y - a.y);
       if (pinch0 > 0) {
-        scara = Math.min(ZOOM_MAX, Math.max(1, scara0 * (acum / pinch0)));
+        scara = prinde(scara0 * (acum / pinch0));
+        if (scara <= 1.01) { tx = 0; ty = 0; }
         limiteaza();
         aplica();
       }
@@ -280,11 +290,10 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
       const frana = poze.length < 2 ? 0.25 : 1;
       img.style.transform = `translateX(${dx * frana}px)`;
     }
-  });
+  }
 
-  const ridicat = (e) => {
+  function ridicat(e) {
     if (!degete.has(e.pointerId)) return;
-    const start = degete.get(e.pointerId);
     degete.delete(e.pointerId);
 
     if (degete.size === 1) {          // s-a terminat pinch-ul, ramane un deget
@@ -304,7 +313,7 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
 
     if (!miscat) {                    // a fost un tap, nu o tragere
       const acum = Date.now();
-      if (acum - ultimulTap < 300) {  // dublu-tap → zoom
+      if (acum - ultimulTap < 300) {  // dublu-tap → zoom acolo unde ai apasat
         ultimulTap = 0;
         scara = ZOOM_TAP;
         const r = scena.getBoundingClientRect();
@@ -327,15 +336,33 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
     if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 110) { inchide(); return; }
     if (Math.abs(dx) > 55) muta(dx < 0 ? 1 : -1);
     else { img.style.transition = 'transform .26s cubic-bezier(.22,.9,.3,1)'; aplica(true); }
-  };
+  }
 
-  scena.addEventListener('pointerup', ridicat);
-  scena.addEventListener('pointercancel', ridicat);
+  // Apasarea o prindem pe scena, dar miscarea si ridicarea pe window:
+  // altfel, daca degetul iese de pe poza, pierdem gestul la jumatate.
+  scena.addEventListener('pointerdown', laApasare);
+  window.addEventListener('pointermove', laMiscare, { passive: false });
+  window.addEventListener('pointerup', ridicat);
+  window.addEventListener('pointercancel', ridicat);
+
+  /* Safari pe iPhone trateaza pinch-ul ca gest de browser si nu ne
+     trimite mereu al doilea deget prin pointer events. Pentru iOS
+     ascultam si evenimentele lui proprii de gest. */
+  let scaraGest = 1;
+  scena.addEventListener('gesturestart', (e) => { e.preventDefault(); scaraGest = scara; });
+  scena.addEventListener('gesturechange', (e) => {
+    e.preventDefault();
+    scara = prinde(scaraGest * e.scale);
+    if (scara <= 1.01) { tx = 0; ty = 0; }
+    limiteaza();
+    aplica();
+  });
+  scena.addEventListener('gestureend', (e) => { e.preventDefault(); limiteaza(); aplica(true); });
 
   /* zoom cu rotita, pe desktop */
   scena.addEventListener('wheel', (e) => {
     e.preventDefault();
-    scara = Math.min(ZOOM_MAX, Math.max(1, scara * (e.deltaY < 0 ? 1.12 : 0.89)));
+    scara = prinde(scara * (e.deltaY < 0 ? 1.12 : 0.89));
     if (scara <= 1.01) { tx = 0; ty = 0; }
     limiteaza();
     aplica();

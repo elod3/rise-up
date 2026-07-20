@@ -784,3 +784,9 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
 @media(prefers-reduced-motion:reduce){
   .vz,.vz-img,.vz-rotund,.vz-sus,.vz-meniu{transition:none!important;animation:none!important}
 }
+
+/* Cât timp ești pe o poză, bara de sus dispare complet. */
+html.vz-activ #nav,
+html.vz-activ #mobile-menu,
+html.vz-activ #burger{opacity:0!important;pointer-events:none!important}
+html.vz-activ #nav{transition:opacity .2s var(--ease)}
