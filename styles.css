@@ -421,6 +421,11 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
 @media (max-width:880px){
   .nav-links{display:none}
   #burger{display:flex}
+  /* Pe telefon, butonul de temă stă lângă logo, iar hamburgerul e
+     împins la dreapta. Fără asta, "space-between" îl lasă la mijloc. */
+  #nav:not(.nav-admin){justify-content:flex-start;gap:13px}
+  #nav:not(.nav-admin) .nav-right{gap:13px}
+  #nav:not(.nav-admin) #burger{margin-left:auto}
   .detail-grid{grid-template-columns:1fr}
   .mis-grid{grid-template-columns:1fr;gap:36px}
   .foot-grid{grid-template-columns:1fr;gap:30px}
@@ -795,3 +800,9 @@ html.vz-activ #nav,
 html.vz-activ #mobile-menu,
 html.vz-activ #burger{opacity:0!important;pointer-events:none!important}
 html.vz-activ #nav{transition:opacity .2s var(--ease)}
+
+/* Pe ecran mic, în dashboard nu mai încape și emailul lângă butoane. */
+@media(max-width:560px){
+  .up-cine{display:none}
+  .nav-admin .nav-right{gap:10px}
+}
