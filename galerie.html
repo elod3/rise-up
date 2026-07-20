@@ -11,10 +11,9 @@
 <!--
   ════════════════════════════════════════════════════════════
   RISE UP — GALERIE FOTO
-  ✏️ Când ai pozele:
-   1. Pune-le în acest folder (ex: foto/1.jpg, foto/2.jpg …)
-   2. Șterge secțiunea „COMING SOON" de mai jos
-   3. Decomentează grila „GALLERY GRID" și înlocuiește src-urile
+  Nu ai nimic de editat aici. Pozele vin din baza de date:
+  fotograful le urcă de pe site, iar grila se umple singură.
+  Cât timp nu e nicio poză, se vede blocul „Coming soon".
   ════════════════════════════════════════════════════════════
 -->
 </head>
@@ -82,17 +81,14 @@
   </div>
 </section>
 
-<!-- ═══════════ GALLERY GRID (decomentează când ai pozele) ═══════════
-<section class="block" style="padding-top:clamp(20px,4vh,50px)">
+<!-- ═══════════ GALERIA ═══════════
+     Se umple singură din baza de date. Cât timp nu e nicio poză,
+     rămâne ascunsă și se vede blocul „Coming soon" de mai sus. -->
+<section class="block" id="galerie-reala" style="padding-top:clamp(20px,4vh,50px)" hidden>
   <div class="wrap">
-    <div class="gallery-grid">
-      <a class="gallery-item reveal" href="foto/1.jpg" target="_blank"><img src="foto/1.jpg" alt="Rise Up" loading="lazy"></a>
-      <a class="gallery-item reveal d1" href="foto/2.jpg" target="_blank"><img src="foto/2.jpg" alt="Rise Up" loading="lazy"></a>
-      <a class="gallery-item reveal d2" href="foto/3.jpg" target="_blank"><img src="foto/3.jpg" alt="Rise Up" loading="lazy"></a>
-    </div>
+    <div class="gallery-grid" id="galerie-grid"></div>
   </div>
 </section>
--->
 
 <!-- ═══════════ FOOTER ═══════════ -->
 <footer id="contact">
@@ -122,5 +118,6 @@
 </footer>
 
 <script src="main.js"></script>
+<script type="module" src="js/galerie.js"></script>
 </body>
 </html>

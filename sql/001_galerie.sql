@@ -55,11 +55,14 @@ $$;
 -- ─── 3. PHOTOS ─────────────────────────────────────────────────
 -- Fisierele stau pe R2. Aici tinem doar evidenta lor.
 
+-- Tinem doar CALEA in R2, nu URL-ul complet. Asa, daca mutam vreodata
+-- Worker-ul pe alt domeniu, pozele vechi continua sa mearga — adresa
+-- se construieste la afisare, din setarile din js/config.js.
+
 create table if not exists public.photos (
   id            uuid primary key default gen_random_uuid(),
-  storage_key   text not null unique,       -- calea in R2: originals/2026-07-20/<uuid>.jpg
-  url           text not null,              -- URL public spre original
-  thumb_url     text,                       -- URL public spre thumbnail
+  storage_key   text not null unique,       -- originals/2026-07-20/<uuid>.jpg
+  thumb_key     text,                       -- thumbs/2026-07-20/<uuid>.jpg
   content_type  text,
   size_bytes    bigint,
   width         int,

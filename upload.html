@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ro" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Încarcă poze — Rise Up</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="styles.css">
+<!--
+  ════════════════════════════════════════════════════════════
+  RISE UP — ÎNCĂRCARE POZE (doar fotograful)
+  Nu există link către pagina asta nicăieri pe site.
+  Se ajunge aici după 4 click-uri rapide pe logo → login.
+  ════════════════════════════════════════════════════════════
+-->
+</head>
+<body>
+
+<nav id="nav" aria-label="Navigare principală">
+  <a class="nav-brand" href="index.html" aria-label="Rise Up — acasă">
+    <img class="logo-d" src="logo-dark.png" alt="Rise Up">
+    <img class="logo-l" src="logo-light.png" alt="Rise Up">
+  </a>
+  <div class="nav-right">
+    <span class="up-cine">Conectat: <b id="cine">…</b></span>
+    <button id="theme-btn" class="theme-btn" aria-label="Schimbă tema">
+      <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8l1.8-1.8M18 6l1.8-1.8"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
+    <button class="btn btn-ghost" id="iesire">Ieși</button>
+  </div>
+</nav>
+
+<header class="page-head">
+  <span class="pill">Zonă fotograf</span>
+  <h1 class="fire-text">Încarcă pozele</h1>
+  <p>Trage pozele în zona de mai jos sau dă click ca să le alegi. Apar în galerie imediat.</p>
+</header>
+
+<section class="block" style="padding-top:0">
+  <div class="wrap up-wrap">
+
+    <label class="up-zi">
+      Ziua (opțional — apare ca etichetă pe poze)
+      <input type="text" id="zi-tag" placeholder="ex: Ziua 1" maxlength="40">
+    </label>
+
+    <div id="zona" class="up-zona" tabindex="0" role="button" aria-label="Alege sau trage pozele aici">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 16V4M8 8l4-4 4 4"/><path d="M4 16v2.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V16"/>
+      </svg>
+      <b>Trage pozele aici</b>
+      <span>sau click ca să le alegi din calculator</span>
+      <input type="file" id="fisiere" accept="image/*" multiple hidden>
+    </div>
+
+    <p class="up-numar" id="stare"></p>
+    <ul class="up-lista" id="lista"></ul>
+
+  </div>
+</section>
+
+<script src="main.js"></script>
+<script type="module" src="js/upload.js"></script>
+</body>
+</html>
