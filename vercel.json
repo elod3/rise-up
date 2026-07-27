@@ -3,6 +3,12 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/g", "destination": "/galerie", "permanent": true }
+    { "source": "/g", "destination": "/galerie", "permanent": true },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.riseupmovement.ro" }],
+      "destination": "https://riseupmovement.ro/:path*",
+      "permanent": true
+    }
   ]
 }
