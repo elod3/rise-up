@@ -12,7 +12,7 @@ bucket_name = "tabara"
 [vars]
 SUPABASE_URL      = "https://svrvfeuhhjldrunqotie.supabase.co"
 SUPABASE_ANON_KEY = "sb_publishable_EpJDq0ODwiw3bE4Ce38RrQ_2GXcG4Rg"
-ALLOWED_ORIGINS   = "https://riseupmovement.ro,http://riseupmovement.ro,https://elod3.github.io,http://localhost:8000,http://127.0.0.1:8000"
+ALLOWED_ORIGINS   = "https://riseupmovement.ro,http://riseupmovement.ro,https://www.riseupmovement.ro,http://www.riseupmovement.ro,https://elod3.github.io,http://localhost:8000,http://127.0.0.1:8000"
 MAX_BYTES         = "52428800"
 
 # ─── Rate limiting nativ Cloudflare (gratis, la marginea retelei) ───
