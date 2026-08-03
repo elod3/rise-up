@@ -104,6 +104,11 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
 
   /* ═════ afisare ═════ */
 
+  /* Incarcatorul originalului curent. Il tinem minte ca sa-l abandonam
+     daca schimbi poza inainte sa se incarce — altfel, la swipe rapid,
+     s-ar decoda mai multe originale full-res deodata si ar umple memoria. */
+  let hdOriginal = null;
+
   const arata = (directie = 0) => {
     const p = poze[i];
     resetZoom(false);
@@ -119,7 +124,21 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
       });
     }
 
-    img.src = adresa(p.storage_key);
+    // Aratam intai thumbnail-ul (deja in cache din grila) ca sa apara
+    // instant, apoi trecem pe original cand s-a incarcat — nu mai astepti
+    // cu ecranul gol pana se descarca poza full-res.
+    const original = adresa(p.storage_key);
+    if (hdOriginal) { hdOriginal.onload = null; hdOriginal.src = ''; }  // abandoneaza ce se incarca
+    if (p.thumb_key) {
+      img.src = adresa(p.thumb_key);
+      hdOriginal = new Image();
+      hdOriginal.decoding = 'async';
+      hdOriginal.onload = () => { if (poze[i] === p) img.src = original; };
+      hdOriginal.src = original;
+    } else {
+      hdOriginal = null;
+      img.src = original;
+    }
 
     // Descarcarea o cere Worker-ul prin ?dl=1 — atributul "download" din
     // HTML e ignorat de browser cand fisierul vine de pe alt domeniu.
