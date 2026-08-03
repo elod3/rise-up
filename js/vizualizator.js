@@ -102,6 +102,26 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
     ty = Math.min(maxY, Math.max(-maxY, ty));
   };
 
+  /* ═════ tranzitia intre poze (slide de tip carusel) ═════ */
+
+  let animeaza = false;    // blocheaza swipe-uri suprapuse cat dureaza slide-ul
+  let gpuTimer = null;
+
+  // will-change:transform doar cat tine gestul + putin dupa. Permanent pe o
+  // poza full-res promoveaza un strat GPU pe fiecare imagine si umple memoria
+  // pe telefon (poza ingheata); tranzitoriu insa da fluiditate la compositing.
+  const gpuPornit = () => {
+    img.style.willChange = 'transform';
+    clearTimeout(gpuTimer);
+    gpuTimer = setTimeout(() => { img.style.willChange = 'auto'; }, 500);
+  };
+
+  // Cat de departe iese poza (peste marginea ecranului, ca sa dispara complet).
+  const latimeIesire = () => scena.clientWidth + 60;
+
+  // Respectam preferinta de "reduce motion": schimbam poza instant, fara slide.
+  const redusMiscare = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   /* ═════ afisare ═════ */
 
   /* Incarcatorul originalului curent. Il tinem minte ca sa-l abandonam
@@ -114,12 +134,16 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
     resetZoom(false);
 
     if (directie) {
+      // Slide-in: asezam noua poza in afara ecranului pe partea opusa
+      // directiei si o aducem lin in centru (fara fade — pur slide).
+      gpuPornit();
+      const de = directie > 0 ? latimeIesire() : -latimeIesire();
+      img.style.opacity = '1';
       img.style.transition = 'none';
-      img.style.opacity = '0';
-      img.style.transform = `translateX(${directie * 60}px)`;
+      img.style.transform = `translateX(${de}px)`;
+      void img.offsetWidth;   // fixam pozitia de start inainte de tranzitie
       requestAnimationFrame(() => {
-        img.style.transition = 'transform .3s cubic-bezier(.22,.9,.3,1), opacity .3s ease';
-        img.style.opacity = '1';
+        img.style.transition = 'transform .3s cubic-bezier(.16,.84,.3,1)';
         img.style.transform = 'translate(0px, 0px) scale(1)';
       });
     }
@@ -161,9 +185,23 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
   };
 
   const muta = (d) => {
-    if (poze.length < 2) return;
-    i = (i + d + poze.length) % poze.length;
-    arata(d);
+    if (poze.length < 2 || animeaza) return;
+    if (redusMiscare) { i = (i + d + poze.length) % poze.length; arata(0); return; }
+    animeaza = true;
+    gpuPornit();
+
+    // Faza 1: poza curenta iese complet in directia swipe-ului. Porneste
+    // din pozitia in care a lasat-o degetul, deci gestul continua natural.
+    const iesire = d > 0 ? -latimeIesire() : latimeIesire();
+    img.style.transition = 'transform .15s cubic-bezier(.4,0,1,.6)';
+    img.style.transform = `translateX(${iesire}px)`;
+
+    // Faza 2: schimbam poza si o aducem din partea opusa (in arata).
+    setTimeout(() => {
+      i = (i + d + poze.length) % poze.length;
+      arata(d);
+      setTimeout(() => { animeaza = false; }, 190);
+    }, 150);
   };
 
   const inchide = () => {
@@ -174,6 +212,8 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
     window.removeEventListener('pointermove', laMiscare);
     window.removeEventListener('pointerup', ridicat);
     window.removeEventListener('pointercancel', ridicat);
+    clearTimeout(gpuTimer);
+    img.style.willChange = 'auto';
     setTimeout(() => box.remove(), 260);
   };
 
@@ -271,6 +311,7 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
       ax = e.clientX; ay = e.clientY;
       tx0 = tx; ty0 = ty;
       img.style.transition = 'none';
+      gpuPornit();
     }
   }
 
@@ -368,7 +409,7 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
     }
 
     if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 110) { inchide(); return; }
-    if (Math.abs(dx) > 55) muta(dx < 0 ? 1 : -1);
+    if (Math.abs(dx) > 55 && !animeaza) muta(dx < 0 ? 1 : -1);
     else { img.style.transition = 'transform .26s cubic-bezier(.22,.9,.3,1)'; aplica(true); }
   }
 
