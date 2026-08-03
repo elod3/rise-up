@@ -1,10 +1,10 @@
 {
-  "name": "Rise Up",
+  "name": "Rise Up Galerie",
   "short_name": "Rise Up",
-  "description": "Rise Up — tabără de tineret creștin. Galeria foto și informațiile taberei.",
+  "description": "Galeria foto Rise Up — pozele taberei, mereu la îndemână.",
   "lang": "ro",
   "dir": "ltr",
-  "start_url": "/",
+  "start_url": "/galerie",
   "scope": "/",
   "display": "standalone",
   "background_color": "#070a12",
