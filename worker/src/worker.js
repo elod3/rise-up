@@ -50,8 +50,9 @@ export default {
     }
 
     if (request.method === 'GET' && url.pathname.startsWith('/f/')) {
-      if (!(await subLimita(env.LIMITA_CITIRE, ip))) return preaMulte(cors);
-      return serveste(request, url.pathname.slice(3), env, url.searchParams, ctx);
+      // Limita de citire se aplica DOAR pe cache MISS (in serveste), ca o
+      // multime care vede poze deja in cache sa nu atinga plafonul.
+      return serveste(request, url.pathname.slice(3), env, url.searchParams, ctx, ip);
     }
 
     if (request.method === 'DELETE' && url.pathname.startsWith('/f/')) {
@@ -170,7 +171,7 @@ function preaMulte(cors) {
 
 /* ─────────── SERVIT ─────────── */
 
-async function serveste(request, cheie, env, parametri, ctx) {
+async function serveste(request, cheie, env, parametri, ctx, ip) {
   // Cache la marginea retelei Cloudflare: prima cerere aduce poza din R2
   // si o pune in cache; urmatoarele (oricine, langa acelasi PoP) o iau de
   // acolo — mult mai repede decat din R2. Cheia include si ?dl/nume, deci
@@ -178,8 +179,17 @@ async function serveste(request, cheie, env, parametri, ctx) {
   const cache = caches.default;
   const cacheKey = new Request(new URL(request.url).toString());
 
+  // Cache HIT: servim de la edge, fara R2 si FARA sa consumam din limita de
+  // citire — o multime care vede aceleasi poze (deja in cache) nu poate
+  // atinge plafonul.
   const dinCache = await cache.match(cacheKey);
   if (dinCache) return dinCache;
+
+  // Cache MISS: abia acum atingem R2, deci abia acum aplicam limita de
+  // citire (calea scumpa), ca scut anti-abuz.
+  if (!(await subLimita(env.LIMITA_CITIRE, ip))) {
+    return preaMulte(anteturiCors(request, env));
+  }
 
   const obiect = await env.BUCKET.get(cheie);
   if (!obiect) return new Response('Poza nu exista', { status: 404 });
