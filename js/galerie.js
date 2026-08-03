@@ -37,17 +37,26 @@ function vizualizator(i) {
 
 incarca();
 
-async function incarca() {
+/** Interogarea unica pentru lista de poze — folosita si la incarcare si
+ *  la resincronizarea periodica. Intoarce null doar la eroare. */
+async function preiaPoze() {
   const { data, error } = await sb
     .from('photos')
     .select('id,storage_key,thumb_key,width,height,size_bytes,day_tag,created_at')
     .order('created_at', { ascending: false });
 
-  if (error) { console.error('[galerie]', error.message); return; }
-  poze.splice(0, poze.length, ...(data || []));
+  if (error) { console.error('[galerie]', error.message); return null; }
+  return data || [];
+}
+
+async function incarca() {
+  const data = await preiaPoze();
+  if (data === null) return;
+  poze.splice(0, poze.length, ...data);
   potSterge = await esteFotograf().catch(() => false);
   deseneaza();
   asculta();
+  autoActualizare();
 }
 
 function deseneaza() {
@@ -76,6 +85,7 @@ function deseneaza() {
 function asculta() {
   sb.channel('poze-noi')
     .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'photos' }, (m) => {
+      if (poze.some((p) => p.id === m.new.id)) return;   // poate a prins-o deja polling-ul
       poze.unshift(m.new);
       deseneaza();
     })
@@ -85,6 +95,42 @@ function asculta() {
       deseneaza();
     })
     .subscribe();
+}
+
+/**
+ * Plasa de siguranta peste Realtime: chiar daca abonarea de mai sus nu
+ * porneste (Realtime oprit pe proiect, retea capricioasa pe telefon),
+ * reluam lista periodic si cand utilizatorul revine pe tab. Redesenam
+ * doar cand chiar s-a schimbat ceva, ca sa nu palpaie grila degeaba.
+ */
+const RESINCRONIZARE_MS = 15000;
+let seSincronizeaza = false;
+
+const aceeasiLista = (a, b) =>
+  a.length === b.length && a.every((p, k) => p.id === b[k].id);
+
+async function resincronizeaza() {
+  if (seSincronizeaza) return;                 // una deja in curs
+  if (document.hidden) return;                 // tab in fundal — n-are rost
+  if (document.querySelector('.vz')) return;   // poza deschisa — nu-i mutam indexul
+  seSincronizeaza = true;
+  try {
+    const data = await preiaPoze();
+    if (data === null || aceeasiLista(data, poze)) return;
+    poze.splice(0, poze.length, ...data);
+    deseneaza();
+  } finally {
+    seSincronizeaza = false;
+  }
+}
+
+function autoActualizare() {
+  setInterval(resincronizeaza, RESINCRONIZARE_MS);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) resincronizeaza();   // ai revenit pe tab → verifica acum
+  });
+  window.addEventListener('focus', resincronizeaza);
+  window.addEventListener('online', resincronizeaza);
 }
 
 /**
