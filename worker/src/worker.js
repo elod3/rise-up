@@ -33,7 +33,7 @@ const TIPURI_OK = [
 ];
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const cors = anteturiCors(request, env);
 
@@ -51,12 +51,12 @@ export default {
 
     if (request.method === 'GET' && url.pathname.startsWith('/f/')) {
       if (!(await subLimita(env.LIMITA_CITIRE, ip))) return preaMulte(cors);
-      return serveste(url.pathname.slice(3), env, url.searchParams);
+      return serveste(request, url.pathname.slice(3), env, url.searchParams, ctx);
     }
 
     if (request.method === 'DELETE' && url.pathname.startsWith('/f/')) {
       if (!(await subLimita(env.LIMITA_UPLOAD, ip))) return preaMulte(cors);
-      return sterge(request, url.pathname.slice(3), env, cors, ip);
+      return sterge(request, url.pathname.slice(3), env, cors, ip, ctx);
     }
 
     if (url.pathname === '/health') {
@@ -170,7 +170,17 @@ function preaMulte(cors) {
 
 /* ─────────── SERVIT ─────────── */
 
-async function serveste(cheie, env, parametri) {
+async function serveste(request, cheie, env, parametri, ctx) {
+  // Cache la marginea retelei Cloudflare: prima cerere aduce poza din R2
+  // si o pune in cache; urmatoarele (oricine, langa acelasi PoP) o iau de
+  // acolo — mult mai repede decat din R2. Cheia include si ?dl/nume, deci
+  // varianta de descarcare se cache-uieste separat de cea inline.
+  const cache = caches.default;
+  const cacheKey = new Request(new URL(request.url).toString());
+
+  const dinCache = await cache.match(cacheKey);
+  if (dinCache) return dinCache;
+
   const obiect = await env.BUCKET.get(cheie);
   if (!obiect) return new Response('Poza nu exista', { status: 404 });
 
@@ -179,21 +189,26 @@ async function serveste(cheie, env, parametri) {
   h.set('etag', obiect.httpEtag);
   h.set('Cache-Control', 'public, max-age=31536000, immutable');
   h.set('Access-Control-Allow-Origin', '*'); // pozele sunt publice
+  h.set('Accept-Ranges', 'bytes');
 
-  // Cu ?dl=1 fortam descarcarea in loc de deschidere in tab.
-  // Atributul "download" din HTML nu functioneaza intre domenii diferite,
-  // deci descarcarea trebuie ceruta de server, nu de pagina.
+  // Cu ?dl=1 fortam descarcarea in loc de deschidere in tab. Atributul
+  // "download" din HTML nu merge intre domenii diferite, deci descarcarea
+  // o cere serverul. O tinem tot cache-abila (URL diferit de cel inline),
+  // ca a doua descarcare sa vina de la edge, nu din R2.
   if (parametri?.get('dl')) {
     const nume = (parametri.get('nume') || cheie.split('/').pop()).replace(/[^\w.\-]/g, '_');
     h.set('Content-Disposition', `attachment; filename="${nume}"`);
-    h.delete('Cache-Control');
   }
 
-  return new Response(obiect.body, { headers: h });
+  const raspuns = new Response(obiect.body, { headers: h });
+
+  // Punem in cache la edge in fundal, fara sa intarziem raspunsul.
+  ctx.waitUntil(cache.put(cacheKey, raspuns.clone()));
+  return raspuns;
 }
 
 /** Sterge o poza din R2. Doar fotograful are voie. */
-async function sterge(request, cheie, env, cors, ip) {
+async function sterge(request, cheie, env, cors, ip, ctx) {
   const token = (request.headers.get('Authorization') || '').replace(/^Bearer\s+/i, '');
   if (!token) return json({ error: 'Trebuie sa fii logat.' }, 401, cors);
 
@@ -201,6 +216,11 @@ async function sterge(request, cheie, env, cors, ip) {
   if (!user.ok) return json({ error: user.motiv }, user.status, cors);
 
   await env.BUCKET.delete(cheie);
+
+  // Scoatem si din cache-ul de la edge (best-effort, pe PoP-ul curent) ca
+  // o poza stearsa sa nu mai fie servita prin URL direct din cache.
+  ctx?.waitUntil(caches.default.delete(`${new URL(request.url).origin}/f/${cheie}`));
+
   return json({ sters: cheie }, 200, cors);
 }
 
