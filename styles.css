@@ -686,8 +686,12 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
   object-fit:contain;
   transform-origin:center center;
   -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
-  will-change:transform;
 }
+/* will-change doar cat poza e marita, ca pan-ul la zoom sa fie fluid.
+   Permanent pe o imagine full-res promoveaza un strat GPU pentru fiecare
+   poza si, dupa multe swipe-uri pe telefon, epuizeaza memoria de imagini
+   a Safari-ului: poza "ingheata" desi numarul de sus avanseaza. */
+.vz-marit .vz-img{will-change:transform}
 .vz-deschis .vz-img{animation:vz-intra .32s cubic-bezier(.22,.9,.3,1)}
 @keyframes vz-intra{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 

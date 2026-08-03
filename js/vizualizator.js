@@ -134,9 +134,11 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
     inchideMeniu();
     detalii.hidden = true;
 
-    [poze[i + 1], poze[i - 1]].filter(Boolean).forEach((v) => {
-      new Image().src = adresa(v.storage_key);
-    });
+    // Nu mai preincarcam originalele vecine. Pe telefon, mai multe poze
+    // full-res decodate in acelasi timp umplu memoria de imagini a
+    // Safari-ului si urmatoarele nu se mai deseneaza (poza "ingheata").
+    // Le incarcam doar cand ajungi efectiv la ele — bytes-ii raman oricum
+    // in cache-ul browserului, deci revenirea la o poza vazuta e instant.
   };
 
   const muta = (d) => {
