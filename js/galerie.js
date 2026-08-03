@@ -21,6 +21,15 @@ const grid       = document.getElementById('galerie-grid');
 const poze = [];   // se modifica pe loc, nu se reatribuie
 let potSterge = false;
 
+// Poza 1x1 transparenta, pusa cat timp o miniatura e "eliberata" din memorie.
+const GOL = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
+
+// Tinem incarcate in memorie DOAR miniaturile din/langa ecran; pe cele care ies
+// mult din vedere le eliberam. Fara asta, dupa mult scroll prin sute de poze,
+// browserul (mai ales pe iPhone) umple memoria de imagini si incepe sa le
+// afiseze degradat/low-res. La scroll inapoi se reincarca instant din cache.
+let observator = null;
+
 /** Calea din R2 → adresa completa. Construita aici, nu salvata in baza. */
 const adresa = (cheie) => `${WORKER_URL}/f/${cheie}`;
 
@@ -68,16 +77,31 @@ function deseneaza() {
   if (comingSoon) comingSoon.hidden = true;
   sectiune.hidden = false;
 
+  // Observatorul care tine memoria sub control: incarca miniatura cand se
+  // apropie de ecran si o elibereaza cand se departeaza mult.
+  if (observator) observator.disconnect();
+  observator = new IntersectionObserver((intrari) => {
+    for (const e of intrari) {
+      const img = e.target;
+      if (e.isIntersecting) {
+        if (img.src !== img.dataset.src) img.src = img.dataset.src;   // aproape → incarca
+      } else if (img.src !== GOL) {
+        img.src = GOL;                                                // departe → elibereaza
+      }
+    }
+  }, { rootMargin: '1200px 0px', threshold: 0 });
+
   grid.innerHTML = '';
   poze.forEach((p, i) => {
     const a = document.createElement('a');
     a.className = 'gallery-item';
     a.href = adresa(p.storage_key);
     a.setAttribute('aria-label', 'Deschide poza');
-    a.innerHTML = `<img src="${adresa(p.thumb_key || p.storage_key)}" alt="Rise Up" loading="lazy"
-                        ${p.width && p.height ? `width="${p.width}" height="${p.height}"` : ''}>`;
+    const dim = p.width && p.height ? `width="${p.width}" height="${p.height}"` : '';
+    a.innerHTML = `<img alt="Rise Up" ${dim} data-src="${adresa(p.thumb_key || p.storage_key)}" src="${GOL}">`;
     a.addEventListener('click', (e) => { e.preventDefault(); vizualizator(i); });
     grid.appendChild(a);
+    observator.observe(a.querySelector('img'));
   });
 }
 
