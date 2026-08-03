@@ -148,21 +148,30 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
       });
     }
 
-    // Aratam intai thumbnail-ul (deja in cache din grila) ca sa apara
-    // instant, apoi trecem pe original cand s-a incarcat — nu mai astepti
-    // cu ecranul gol pana se descarca poza full-res.
+    // Aratam poza abia dupa ce e COMPLET decodata, ca sa nu se vada
+    // jumatate de imagine incarcandu-se (mai ales cand miniatura nu era
+    // inca in cache). Intai miniatura (apare repede), apoi originalul cand
+    // e gata; nu revenim pe miniatura dupa ce a aparut originalul.
     const original = adresa(p.storage_key);
-    if (hdOriginal) { hdOriginal.onload = null; hdOriginal.src = ''; }  // abandoneaza ce se incarca
-    if (p.thumb_key) {
-      img.src = adresa(p.thumb_key);
-      hdOriginal = new Image();
-      hdOriginal.decoding = 'async';
-      hdOriginal.onload = () => { if (poze[i] === p) img.src = original; };
-      hdOriginal.src = original;
-    } else {
-      hdOriginal = null;
-      img.src = original;
+    const thumb = p.thumb_key ? adresa(p.thumb_key) : null;
+    if (hdOriginal) { hdOriginal.onload = null; hdOriginal.src = ''; }  // abandoneaza originalul in curs
+
+    let originalGata = false;
+    const pune = (url) => { if (poze[i] === p) img.src = url; };
+
+    if (thumb) {
+      const t = new Image();
+      t.decoding = 'async';
+      t.src = thumb;
+      const araThumb = () => { if (!originalGata) pune(thumb); };
+      t.decode ? t.decode().then(araThumb, () => {}) : (t.onload = araThumb);
     }
+
+    hdOriginal = new Image();
+    hdOriginal.decoding = 'async';
+    hdOriginal.src = original;
+    const araOrig = () => { originalGata = true; pune(original); };
+    hdOriginal.decode ? hdOriginal.decode().then(araOrig, () => {}) : (hdOriginal.onload = araOrig);
 
     // Descarcarea o cere Worker-ul prin ?dl=1 — atributul "download" din
     // HTML e ignorat de browser cand fisierul vine de pe alt domeniu.
@@ -177,11 +186,13 @@ export function deschide({ poze, pornireLa, adresa, potSterge, laStergere }) {
     inchideMeniu();
     detalii.hidden = true;
 
-    // Nu mai preincarcam originalele vecine. Pe telefon, mai multe poze
-    // full-res decodate in acelasi timp umplu memoria de imagini a
-    // Safari-ului si urmatoarele nu se mai deseneaza (poza "ingheata").
-    // Le incarcam doar cand ajungi efectiv la ele — bytes-ii raman oricum
-    // in cache-ul browserului, deci revenirea la o poza vazuta e instant.
+    // Preincarcam DOAR miniaturile vecine (mici — sigure pentru memorie,
+    // spre deosebire de originale, care ingheata galeria pe telefon). Asa,
+    // la urmatorul swipe, miniatura e deja in cache si apare instant si
+    // intreaga, nu incarcandu-se pe jumatate.
+    [poze[i + 1], poze[i - 1]].filter((v) => v && v.thumb_key).forEach((v) => {
+      const im = new Image(); im.decoding = 'async'; im.src = adresa(v.thumb_key);
+    });
   };
 
   const muta = (d) => {
