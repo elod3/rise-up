@@ -435,6 +435,9 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
   body{font-size:16px}
   .hero-inner{padding-bottom:120px}
   .scroll-hint{bottom:14px}
+  /* 2 poze pe rand pe telefon: celulele devin ~jumatate, deci miniatura de
+     600px se afiseaza clar (pe 1 coloana era marita ~2x → parea low-res). */
+  .gallery-grid{grid-template-columns:1fr 1fr;gap:10px}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}

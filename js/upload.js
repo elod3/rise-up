@@ -15,7 +15,7 @@ import { WORKER_URL } from './config.js';
 import { porneste as porneteDashboard, reincarca as reincarcaDashboard } from './dashboard.js';
 
 const PARALEL   = 3;
-const THUMB_MAX = 600;   // px pe latura lunga
+const THUMB_MAX = 1000;   // px pe latura lunga (clar si pe celule mari / in viewer)
 
 const zona    = document.getElementById('zona');
 const input   = document.getElementById('fisiere');
@@ -177,7 +177,7 @@ async function pregateste(fisier) {
     c.getContext('2d').drawImage(bitmap, 0, 0, c.width, c.height);
     bitmap.close();
 
-    const thumb = await new Promise((r) => c.toBlob(r, 'image/jpeg', 0.82));
+    const thumb = await new Promise((r) => c.toBlob(r, 'image/jpeg', 0.85));
     return { latime, inaltime, thumb };
   } catch {
     // Unele formate (HEIC de pe iPhone) nu pot fi citite de browser.
