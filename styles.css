@@ -122,7 +122,9 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.06;letter-s
 #nav{
   position:fixed;top:0;left:0;right:0;z-index:900;
   display:flex;align-items:center;justify-content:space-between;
-  padding:16px clamp(18px,4vw,46px);
+  /* padding-top lasa loc pentru status bar-ul iPhone cand site-ul ruleaza
+     ca aplicatie instalata (standalone); in browserul normal env() = 0. */
+  padding:calc(16px + env(safe-area-inset-top,0px)) clamp(18px,4vw,46px) 16px;
   background:transparent;
   border-bottom:1px solid transparent;
   transition:background .4s var(--ease),backdrop-filter .4s,border-color .4s,padding .4s var(--ease);
@@ -131,7 +133,7 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.06;letter-s
   background:var(--nav-bg);
   backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
   border-bottom:1px solid var(--card-brd);
-  padding-top:11px;padding-bottom:11px;
+  padding-top:calc(11px + env(safe-area-inset-top,0px));padding-bottom:11px;
 }
 .nav-brand{display:flex;align-items:center}
 .nav-brand img{height:30px;width:auto;display:block;transition:height .4s var(--ease)}
