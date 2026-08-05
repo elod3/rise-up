@@ -10,7 +10,7 @@
  * cache la edge; aici pastram doar fisierele site-ului.
  */
 
-const CACHE = 'riseup-v1';
+const CACHE = 'riseup-v2';
 
 // Fisierele de baza. Le adaugam individual (allSettled) ca un singur 404
 // sa nu strice instalarea service worker-ului.
@@ -45,26 +45,17 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;   // pozele de pe Worker/R2: le lasam in pace
 
-  // Navigare in site: network-first (sa vezi mereu ultima versiune), iar
-  // daca esti offline, servim din cache.
-  if (request.mode === 'navigate') {
-    e.respondWith(
-      fetch(request).catch(() => caches.match(request).then((r) => r || caches.match('/index.html'))),
-    );
-    return;
-  }
-
-  // Restul fisierelor site-ului: stale-while-revalidate — servim din cache
-  // instant (rapid, merge si offline), dar reincarcam in fundal, ca dupa un
-  // deploy sa ai versiunea noua la urmatoarea vizita.
+  // Network-first pentru tot site-ul: cand ai net, iei MEREU ultima versiune
+  // (deci dupa un deploy vezi imediat noul cod, fara sa ramai pe cache vechi);
+  // doar offline cazi pe cache. Fisierele sunt mici + au cache la edge, deci
+  // e oricum rapid.
   e.respondWith(
-    caches.match(request).then((rasp) => {
-      const retea = fetch(request).then((net) => {
-        const copie = net.clone();
-        caches.open(CACHE).then((c) => c.put(request, copie)).catch(() => {});
-        return net;
-      }).catch(() => rasp);
-      return rasp || retea;
-    }),
+    fetch(request).then((net) => {
+      const copie = net.clone();
+      caches.open(CACHE).then((c) => c.put(request, copie)).catch(() => {});
+      return net;
+    }).catch(() => caches.match(request).then((r) =>
+      r || (request.mode === 'navigate' ? caches.match('/index.html') : undefined),
+    )),
   );
 });
