@@ -250,31 +250,6 @@ section.block{position:relative;padding:clamp(80px,12vh,140px) clamp(20px,4vw,46
 .section-head h2{font-size:clamp(34px,5.5vw,62px);margin-bottom:18px}
 .section-head p{color:var(--ink-dim);font-weight:400;font-size:18px}
 
-/* ─────────── DATA & LOCAȚIE ─────────── */
-#detalii{background:var(--bg-2)}
-.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,30px)}
-.detail-card{
-  background:var(--card);border:1px solid var(--card-brd);border-radius:var(--radius);
-  padding:clamp(28px,4vw,44px);position:relative;overflow:hidden;
-  transition:transform .4s var(--ease),border-color .4s,background .4s;
-}
-.detail-card:hover{transform:translateY(-5px);border-color:var(--line);background:var(--card-hover)}
-.detail-card .ico{
-  width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;
-  background:var(--ember);color:var(--fire);margin-bottom:22px;
-}
-.detail-card .ico svg{width:26px;height:26px}
-.detail-card h3{font-size:clamp(24px,3vw,32px);margin-bottom:6px}
-.detail-card .big{font-size:clamp(28px,4vw,42px);color:var(--fire);font-family:var(--display);line-height:1.1;margin-bottom:10px}
-.detail-card p{color:var(--ink-dim);font-size:15.5px;margin-bottom:6px}
-.detail-card .map-link{
-  display:inline-flex;align-items:center;gap:8px;margin-top:18px;color:var(--fire);font-weight:700;
-  font-size:14px;border-bottom:1px solid transparent;transition:border-color .3s,gap .3s;
-}
-.detail-card .map-link:hover{border-color:var(--fire);gap:12px}
-.detail-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
-.detail-meta span{font-size:12.5px;color:var(--ink-soft);background:var(--card);border:1px solid var(--card-brd);padding:6px 14px;border-radius:100px}
-
 /* ─────────── ÎNSCRIERI ─────────── */
 #inscriere{position:relative;overflow:hidden;text-align:center}
 .cta-band{
@@ -428,7 +403,6 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
   #nav:not(.nav-admin){justify-content:flex-start;gap:13px}
   #nav:not(.nav-admin) .nav-right{gap:13px}
   #nav:not(.nav-admin) #burger{margin-left:auto}
-  .detail-grid{grid-template-columns:1fr}
   .mis-grid{grid-template-columns:1fr;gap:36px}
   .foot-grid{grid-template-columns:1fr;gap:30px}
   .hero-ctas .btn{flex:1;justify-content:center;min-width:160px}
