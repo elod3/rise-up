@@ -250,6 +250,29 @@ section.block{position:relative;padding:clamp(80px,12vh,140px) clamp(20px,4vw,46
 .section-head h2{font-size:clamp(34px,5.5vw,62px);margin-bottom:18px}
 .section-head p{color:var(--ink-dim);font-weight:400;font-size:18px}
 
+/* ─────────── LOCAȚIE ─────────── */
+#detalii{background:var(--bg-2)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,30px)}
+.detail-grid-one{grid-template-columns:minmax(0,560px);justify-content:center}
+.detail-card{
+  background:var(--card);border:1px solid var(--card-brd);border-radius:var(--radius);
+  padding:clamp(28px,4vw,44px);position:relative;overflow:hidden;
+  transition:transform .4s var(--ease),border-color .4s,background .4s;
+}
+.detail-card:hover{transform:translateY(-5px);border-color:var(--line);background:var(--card-hover)}
+.detail-card .ico{
+  width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  background:var(--ember);color:var(--fire);margin-bottom:22px;
+}
+.detail-card .ico svg{width:26px;height:26px}
+.detail-card h3{font-size:clamp(24px,3vw,32px);margin-bottom:6px}
+.detail-card p{color:var(--ink-dim);font-size:15.5px;margin-bottom:6px}
+.detail-card .map-link{
+  display:inline-flex;align-items:center;gap:8px;margin-top:18px;color:var(--fire);font-weight:700;
+  font-size:14px;border-bottom:1px solid transparent;transition:border-color .3s,gap .3s;
+}
+.detail-card .map-link:hover{border-color:var(--fire);gap:12px}
+
 /* ─────────── ÎNSCRIERI ─────────── */
 #inscriere{position:relative;overflow:hidden;text-align:center}
 .cta-band{
