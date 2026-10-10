@@ -186,7 +186,15 @@
   }
 
   /* ─────────── CER CU STELE (fundal fix, toată pagina) ─────────── */
-  const cv = document.getElementById('stars');
+  /* Panza o facem din JS, nu o scriem in fiecare pagina: asa o are orice
+     pagina care incarca main.js, inclusiv cele construite din JS. */
+  let cv = document.getElementById('stars');
+  if (!cv){
+    cv = document.createElement('canvas');
+    cv.id = 'stars';
+    cv.setAttribute('aria-hidden', 'true');
+    document.body.prepend(cv);
+  }
   if (cv){
     const ctx = cv.getContext('2d');
     let dpr = 1, W = 0, H = 0, ps = [];

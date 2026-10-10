@@ -415,11 +415,22 @@ section.block{position:relative;padding:clamp(80px,12vh,140px) clamp(20px,4vw,46
 
 /* header intern de pagină (sub-hero pentru pagini secundare) */
 .page-head{
-  position:relative;padding:clamp(130px,18vh,190px) clamp(20px,4vw,46px) clamp(50px,8vh,80px);
+  position:relative;padding:clamp(126px,17vh,178px) clamp(20px,4vw,46px) clamp(44px,6vh,64px);
   text-align:center;overflow:hidden;
-  background:radial-gradient(ellipse 60% 80% at 50% 0%,var(--ember),transparent 60%),var(--bg);
+  /* Fara var(--bg) la final: era opac si acoperea cerul cu stele tocmai sus,
+     unde se vede cel mai bine. Ramane doar aura. */
+  background:radial-gradient(ellipse 70% 85% at 50% -8%,var(--ember),transparent 62%);
 }
-.page-head::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:34%;background:linear-gradient(var(--fire),transparent);box-shadow:0 0 22px 3px var(--ember)}
+/* Inainte era o dunga verticala de "flacara". Acum e o aura difuza, in acelasi
+   limbaj cu cerul de pe prima pagina. */
+.page-head::after{
+  content:'';position:absolute;top:-130px;left:50%;transform:translateX(-50%);
+  width:min(620px,88vw);height:300px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,var(--ember),transparent);
+  filter:blur(24px);
+}
+/* Fara asta ramanea o gaura de ~200px intre titlul paginii si continut. */
+.page-head + .block{padding-top:clamp(40px,6vh,68px)}
 .page-head .pill{margin-bottom:20px}
 .page-head h1{font-size:clamp(40px,7vw,80px);margin-bottom:16px}
 .page-head p{color:var(--ink-dim);max-width:600px;margin:0 auto;font-weight:400}

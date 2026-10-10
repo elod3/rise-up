@@ -31,12 +31,17 @@ let active = 0;
 
 const { data: { session } } = await sb.auth.getSession();
 if (!session || !(await esteFotograf())) {
-  document.body.innerHTML = `
+  /* Golim pagina, dar pastram panza cu stele — altfel ecranul de refuz
+     ramane pe un fundal gol, fara nimic din design. */
+  const panza = document.getElementById('stars');
+  document.body.innerHTML = '';
+  if (panza) document.body.prepend(panza);
+  document.body.insertAdjacentHTML('beforeend', `
     <div class="up-refuz">
       <h1 class="fire-text">Zonă restricționată</h1>
       <p>Pagina asta e doar pentru fotograful taberei.</p>
       <a class="btn btn-fire" href="index.html">Înapoi la site</a>
-    </div>`;
+    </div>`);
   throw new Error('acces refuzat');
 }
 
