@@ -201,38 +201,49 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.06;letter-s
 #embers{position:absolute;inset:0;z-index:2;pointer-events:none}
 .hero-media{position:absolute;inset:0;z-index:1}
 .hero-media img,.hero-media video{width:100%;height:100%;object-fit:cover;object-position:center}
+/* Afișul stă și în fundal, dar neclar — așa ia culoarea ediției fără să se bată cap în cap
+   cu afișul clar din mijloc. */
+.hero-media img{filter:blur(26px) saturate(1.15) brightness(.8);transform:scale(1.32)}
+/* scale 1.32 nu e decorativ: blur-ul decolorează marginile imaginii, iar fără marja
+   asta se vedea o dungă deschisă sus pe tema light. */
 .hero-veil{
   position:absolute;inset:0;z-index:2;
   background:
-    linear-gradient(to top,var(--bg) 2%,rgba(7,10,18,.35) 42%,rgba(7,10,18,.55) 100%),
-    linear-gradient(to right,rgba(7,10,18,.7),rgba(7,10,18,.1) 60%);
+    linear-gradient(to top,var(--bg) 2%,rgba(7,10,18,.45) 42%,rgba(7,10,18,.62) 100%),
+    radial-gradient(120% 90% at 50% 45%,rgba(7,10,18,.15),rgba(7,10,18,.72));
 }
 [data-theme="light"] .hero-veil{
   background:
-    linear-gradient(to top,var(--bg) 1%,rgba(251,246,236,.15) 45%,rgba(20,12,4,.35) 100%),
-    linear-gradient(to right,rgba(20,12,4,.45),rgba(20,12,4,0) 60%);
+    linear-gradient(to top,var(--bg) 1%,rgba(251,246,236,.18) 45%,rgba(20,12,4,.4) 100%),
+    radial-gradient(120% 90% at 50% 45%,rgba(20,12,4,.1),rgba(20,12,4,.5));
 }
-.hero-inner{position:relative;z-index:3;width:100%;max-width:var(--max);margin:0 auto;padding:120px clamp(20px,4vw,46px) 90px}
+.hero-inner{
+  position:relative;z-index:3;width:100%;max-width:var(--max);margin:0 auto;
+  padding:116px clamp(20px,4vw,46px) 96px;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+}
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
 .hero-inner>*{opacity:0;animation:fadeUp .9s var(--ease) forwards}
-.hero-inner .pill{animation-delay:.2s}
-.hero-inner h1{animation-delay:.38s}
-.hero-sub{animation-delay:.6s}
-.hero-verse{animation-delay:.78s}
-.hero-ctas{animation-delay:.96s}
-.scroll-hint{animation:fadeUp 1s 1.3s var(--ease) backwards}
-.hero-inner .pill{margin-bottom:24px}
-.hero-inner h1{
-  font-size:clamp(54px,9.5vw,128px);letter-spacing:-.02em;line-height:.92;margin-bottom:22px;color:#fff;
-  text-shadow:0 2px 40px rgba(0,0,0,.4);
+.hero-poster{animation-delay:.2s}
+.hero-sub{animation-delay:.5s}
+.hero-verse{animation-delay:.68s}
+.hero-ctas{animation-delay:.86s}
+.scroll-hint{animation:fadeUp 1s 1.2s var(--ease) backwards}
+/* Afișul ediției — se vede întreg, nu tăiat, și pe telefon. */
+.hero-poster{
+  display:block;width:100%;max-width:940px;height:auto;aspect-ratio:16/9;object-fit:cover;
+  border-radius:18px;border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 28px 80px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.25);
+  margin-bottom:clamp(26px,4vh,40px);
 }
-.hero-inner h1 .glow{
-  background:linear-gradient(180deg,#fff,var(--fire-hot) 70%,var(--fire));
-  -webkit-background-clip:text;background-clip:text;color:transparent;
+[data-theme="light"] .hero-poster{border-color:rgba(20,12,4,.14);box-shadow:0 24px 64px rgba(20,12,4,.28)}
+.sr-only{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
 }
-.hero-sub{max-width:540px;color:#f1ece1;font-size:clamp(17px,2vw,21px);font-weight:400;margin-bottom:18px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
-.hero-verse{display:block;color:#e9dcc4;margin-bottom:38px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
-.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.hero-sub{max-width:640px;color:#f1ece1;font-size:clamp(17px,2vw,21px);font-weight:400;margin-bottom:18px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+.hero-verse{display:block;max-width:640px;color:#e9dcc4;margin-bottom:38px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
 .scroll-hint{
   position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:3;
   display:flex;flex-direction:column;align-items:center;gap:9px;
@@ -433,6 +444,7 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
 @media (max-width:560px){
   body{font-size:16px}
   .hero-inner{padding-bottom:120px}
+  .hero-poster{border-radius:14px;margin-bottom:24px}
   .scroll-hint{bottom:14px}
   /* 2 poze pe rand pe telefon: celulele devin ~jumatate, deci miniatura de
      600px se afiseaza clar (pe 1 coloana era marita ~2x → parea low-res). */

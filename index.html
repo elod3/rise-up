@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Rise Up — O generație trezită</title>
-<meta name="description" content="Rise Up — tabără de tineret creștin. O generație trezită de Dumnezeu, o armată care Îl înalță pe Cristos.">
+<meta name="description" content="Rise Up — In His Presence. O generație trezită de Dumnezeu. O armată care Îl înalță pe Cristos — în jurul focului, în natură, împreună.">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#070a12">
@@ -55,18 +55,20 @@
 
 <!-- ═══════════ HERO ═══════════ -->
 <header id="hero">
-  <div class="hero-media">
-    <!-- ✏️ EDITEAZĂ — CLIP HERO:
-         Când ai clipul (tineri la focul de tabără, volei, jogging) pune-l în acest folder
-         și înlocuiește <img> de mai jos cu:
-         <video src="hero.mp4" poster="hero.jpg" autoplay muted loop playsinline></video> -->
-    <img src="hero.jpg" alt="Tineri privind focul de tabără la apus">
+  <!-- ✏️ EDITEAZĂ — AFIȘUL EDIȚIEI:
+       Fundalul e aceeași imagine, doar neclară (ambianță). Ca să schimbi ediția,
+       înlocuiește fișierul "in-his-presence.jpg" sau pune altul și schimbă-i numele
+       în ambele <img> de mai jos (fundal + afiș). -->
+  <div class="hero-media" aria-hidden="true">
+    <img src="in-his-presence.jpg" alt="">
   </div>
   <canvas id="embers" aria-hidden="true"></canvas>
   <div class="hero-veil"></div>
   <div class="hero-inner">
-    <span class="pill">✦ Tabără de tineret creștin</span>
-    <h1>Rise <span class="glow">Up</span></h1>
+    <h1 class="sr-only">Rise Up — In His Presence</h1>
+    <img class="hero-poster" src="in-his-presence.jpg"
+         alt="In His Presence — Rise Up, 30 decembrie – 3 ianuarie, Liceul Integritas"
+         width="1600" height="900" fetchpriority="high">
     <p class="hero-sub">O generație trezită de Dumnezeu. O armată care Îl înalță pe Cristos — în jurul focului, în natură, împreună.</p>
     <span class="verse hero-verse">„Sculați-vă și străluciți, căci lumina voastră a venit." — Isaia 60:1</span>
     <div class="hero-ctas">
