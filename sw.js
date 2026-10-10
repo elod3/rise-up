@@ -10,7 +10,7 @@
  * cache la edge; aici pastram doar fisierele site-ului.
  */
 
-const CACHE = 'riseup-v3';
+const CACHE = 'riseup-v4';
 
 // Fisierele de baza. Le adaugam individual (allSettled) ca un singur 404
 // sa nu strice instalarea service worker-ului.
