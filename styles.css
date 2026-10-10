@@ -3,7 +3,9 @@
    Folosit de toate paginile (index / triburi / regulament / inscriere)
    ─────────────────────────────────────────────────────────────
    • Dark + Light mode (toggle în navbar, salvat în localStorage)
-   • Accent „foc de tabără" pe ambele teme
+   • Accent „lumină de stea" pe ambele teme (fără portocaliu)
+   • --fire* au rămas ca nume doar ca să nu rupă clasele vechi (.fire-text,
+     .btn-fire); culoarea reală vine din --accent*
    ═══════════════════════════════════════════════════════════════ */
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;0,900;1,500;1,600&family=Manrope:wght@300;400;500;600;700;800&display=swap');
@@ -16,18 +18,24 @@
   --card:rgba(255,255,255,.035);
   --card-brd:rgba(255,255,255,.09);
   --card-hover:rgba(255,255,255,.06);
-  --ink:#f1ece1;
-  --ink-soft:#c5bfb2;
-  --ink-dim:#8b8676;
-  --fire:#f2a64a;
-  --fire-hot:#ffd9a0;
-  --fire-deep:#d97b2c;
-  --ember:rgba(242,166,74,.16);
-  --line:rgba(242,166,74,.22);
+  --ink:#e8edf7;
+  --ink-soft:#b8c3d8;
+  --ink-dim:#7f8aa1;
+  --accent:#9fc6f5;
+  --accent-hot:#eaf4ff;
+  --accent-deep:#5b8ed4;
+  --accent-ink:#06101f;
+  --accent-sh:rgba(159,198,245,.45);
+  --band:rgba(12,17,28,.7);     /* benzile de sectiune, translucide peste stele */
+  --fire:var(--accent);
+  --fire-hot:var(--accent-hot);
+  --fire-deep:var(--accent-deep);
+  --ember:rgba(159,198,245,.13);
+  --line:rgba(159,198,245,.22);
   --nav-bg:rgba(7,10,18,.55);
   --nav-bg-solid:rgba(8,11,20,.86);
   --shadow:0 24px 60px -20px rgba(0,0,0,.7);
-  --glow:0 0 50px -8px rgba(242,166,74,.45);
+  --glow:0 0 50px -8px rgba(159,198,245,.4);
 
   --display:'Playfair Display',serif;
   --body:'Manrope',sans-serif;
@@ -39,31 +47,39 @@
 
 /* ─────────── TOKENS — LIGHT ─────────── */
 [data-theme="light"]{
-  --bg:#fbf6ec;
-  --bg-2:#f4ecdc;
-  --bg-3:#efe5d1;
-  --card:rgba(60,40,18,.04);
-  --card-brd:rgba(60,40,18,.12);
-  --card-hover:rgba(60,40,18,.07);
-  --ink:#241c12;
-  --ink-soft:#4a3f30;
-  --ink-dim:#7d7059;
-  --fire:#d97a23;
-  --fire-hot:#b95e12;
-  --fire-deep:#a64e0e;
-  --ember:rgba(217,122,35,.14);
-  --line:rgba(217,122,35,.3);
-  --nav-bg:rgba(251,246,236,.6);
-  --nav-bg-solid:rgba(251,246,236,.9);
-  --shadow:0 24px 50px -22px rgba(120,80,30,.35);
-  --glow:0 0 44px -10px rgba(217,122,35,.5);
+  --bg:#f5f7fc;
+  --bg-2:#eceff8;
+  --bg-3:#e2e8f4;
+  --card:rgba(16,30,60,.04);
+  --card-brd:rgba(16,30,60,.12);
+  --card-hover:rgba(16,30,60,.07);
+  --ink:#111827;
+  --ink-soft:#3a4557;
+  --ink-dim:#6c7689;
+  --accent:#2f62ad;
+  --accent-hot:#13386f;
+  --accent-deep:#1b4a8c;
+  --accent-ink:#ffffff;
+  --accent-sh:rgba(47,98,173,.4);
+  --band:rgba(236,239,248,.78);
+  --fire:var(--accent);
+  --fire-hot:var(--accent-hot);
+  --fire-deep:var(--accent-deep);
+  --ember:rgba(47,98,173,.1);
+  --line:rgba(47,98,173,.26);
+  --nav-bg:rgba(245,247,252,.62);
+  --nav-bg-solid:rgba(245,247,252,.9);
+  --shadow:0 24px 50px -22px rgba(20,40,80,.32);
+  --glow:0 0 44px -10px rgba(47,98,173,.42);
   color-scheme:light;
 }
 
 /* ─────────── BASE ─────────── */
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-html,body{background:var(--bg)}
+html{background:var(--bg)}
+/* body transparent, altfel fundalul lui ar acoperi pânza cu stele (z-index:-1). */
+body{background:transparent}
 body{
   font-family:var(--body);
   color:var(--ink);
@@ -76,7 +92,7 @@ body{
 img,video,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 ul{list-style:none}
-::selection{background:var(--fire);color:#0a0c13}
+::selection{background:var(--accent);color:var(--accent-ink)}
 
 h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.06;letter-spacing:-.015em}
 .eyebrow{
@@ -105,9 +121,9 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.06;letter-s
 .btn svg{width:16px;height:16px}
 .btn-fire{
   background:linear-gradient(135deg,var(--fire),var(--fire-deep));
-  color:#1a0f02;box-shadow:0 8px 24px -8px rgba(242,166,74,.5);
+  color:var(--accent-ink);box-shadow:0 8px 24px -8px var(--accent-sh);
 }
-.btn-fire:hover{transform:translateY(-3px);box-shadow:0 16px 40px -10px rgba(242,166,74,.65)}
+.btn-fire:hover{transform:translateY(-3px);box-shadow:0 18px 44px -10px var(--accent-sh)}
 .btn-ghost{border:1px solid var(--card-brd);color:var(--ink);background:var(--card)}
 .btn-ghost:hover{border-color:var(--fire);color:var(--fire);transform:translateY(-3px)}
 
@@ -196,16 +212,23 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.06;letter-s
 #mobile-menu.open a:nth-child(4){transition-delay:.24s}
 #mobile-menu.open a:nth-child(5){transition-delay:.3s}
 
+/* ═══════════════ CER CU STELE (fundal global) ═══════════════ */
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+
 /* ═══════════════ HERO ═══════════════ */
-#hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
-#embers{position:absolute;inset:0;z-index:2;pointer-events:none}
-.hero-media{position:absolute;inset:0;z-index:1}
+/* #hero e mai inalt decat ecranul: diferenta e exact cat scroll are efectul
+   prin care afisul creste pana umple ecranul si apoi se stinge. */
+#hero{position:relative;height:200svh}
+.hero-stage{
+  position:sticky;top:0;height:100svh;overflow:hidden;
+  display:flex;align-items:center;
+}
+.hero-media{position:absolute;inset:0;z-index:1;will-change:opacity,transform}
 .hero-media img,.hero-media video{width:100%;height:100%;object-fit:cover;object-position:center}
-/* Afișul stă și în fundal, dar neclar — așa ia culoarea ediției fără să se bată cap în cap
-   cu afișul clar din mijloc. */
+/* Afisul sta si in fundal, dar neclar — asa ia culoarea editiei fara sa se bata
+   cap in cap cu afisul clar din mijloc. scale 1.32 nu e decorativ: blur-ul
+   decoloreaza marginile, iar fara marja asta se vedea o dunga deschisa sus. */
 .hero-media img{filter:blur(26px) saturate(1.15) brightness(.8);transform:scale(1.32)}
-/* scale 1.32 nu e decorativ: blur-ul decolorează marginile imaginii, iar fără marja
-   asta se vedea o dungă deschisă sus pe tema light. */
 .hero-veil{
   position:absolute;inset:0;z-index:2;
   background:
@@ -214,40 +237,54 @@ h1,h2,h3,h4{font-family:var(--display);font-weight:800;line-height:1.06;letter-s
 }
 [data-theme="light"] .hero-veil{
   background:
-    linear-gradient(to top,var(--bg) 1%,rgba(251,246,236,.18) 45%,rgba(20,12,4,.4) 100%),
-    radial-gradient(120% 90% at 50% 45%,rgba(20,12,4,.1),rgba(20,12,4,.5));
+    linear-gradient(to top,var(--bg) 1%,rgba(245,247,252,.18) 45%,rgba(6,12,26,.42) 100%),
+    radial-gradient(120% 90% at 50% 45%,rgba(6,12,26,.12),rgba(6,12,26,.52));
 }
 .hero-inner{
   position:relative;z-index:3;width:100%;max-width:var(--max);margin:0 auto;
-  padding:116px clamp(20px,4vw,46px) 96px;
+  padding:106px clamp(20px,4vw,46px) 110px;   /* jos lasam loc pentru "Coboara" */
   display:flex;flex-direction:column;align-items:center;text-align:center;
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
 .hero-inner>*{opacity:0;animation:fadeUp .9s var(--ease) forwards}
-.hero-poster{animation-delay:.2s}
+/* Dupa ce intra, taiem animatia: altfel "forwards" ar tine opacity:1 peste
+   stilul pus de scroll si afisul nu s-ar mai stinge. */
+#hero.scroll-ready .hero-inner>*{animation:none;opacity:1}
+.hero-slot{animation-delay:.2s}
 .hero-sub{animation-delay:.5s}
 .hero-verse{animation-delay:.68s}
 .hero-ctas{animation-delay:.86s}
 .scroll-hint{animation:fadeUp 1s 1.2s var(--ease) backwards}
-/* Afișul ediției — se vede întreg, nu tăiat, și pe telefon. */
-.hero-poster{
-  display:block;width:100%;max-width:940px;height:auto;aspect-ratio:16/9;object-fit:cover;
-  border-radius:18px;border:1px solid rgba(255,255,255,.14);
-  box-shadow:0 28px 80px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.25);
+
+/* Locul afisului: tine spatiul in pagina. Rama din el e cea care creste.
+   Latimea e limitata si de inaltimea ecranului: ~500px din ecran sunt luati
+   de navbar, text, butoane si "Coboara", iar ce ramane imparte la 16/9.
+   Fara asta, pe laptop afisul impingea butoanele afara din ecran. */
+.hero-slot{
+  position:relative;aspect-ratio:16/9;
+  width:min(100%, 940px, calc((100svh - 500px) * 16 / 9));
   margin-bottom:clamp(26px,4vh,40px);
 }
-[data-theme="light"] .hero-poster{border-color:rgba(20,12,4,.14);box-shadow:0 24px 64px rgba(20,12,4,.28)}
+.hero-frame{
+  position:absolute;inset:0;z-index:4;overflow:hidden;
+  border-radius:18px;border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 28px 80px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.25);
+  will-change:left,top,width,height,opacity;
+}
+[data-theme="light"] .hero-frame{border-color:rgba(6,12,26,.14);box-shadow:0 24px 64px rgba(6,12,26,.3)}
+.hero-poster{display:block;width:100%;height:100%;object-fit:cover}
+
 .sr-only{
   position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
   clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
 }
-.hero-sub{max-width:640px;color:#f1ece1;font-size:clamp(17px,2vw,21px);font-weight:400;margin-bottom:18px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
-.hero-verse{display:block;max-width:640px;color:#e9dcc4;margin-bottom:38px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+.hero-sub{max-width:640px;color:#e8edf7;font-size:clamp(17px,2vw,21px);font-weight:400;margin-bottom:18px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
+.hero-verse{display:block;max-width:640px;color:#cdd8ea;margin-bottom:38px;text-shadow:0 2px 20px rgba(0,0,0,.5)}
 .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
 .scroll-hint{
   position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:3;
   display:flex;flex-direction:column;align-items:center;gap:9px;
-  font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#e9dcc4;opacity:.8;
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#cdd8ea;opacity:.8;
 }
 .scroll-hint i{display:block;width:1px;height:42px;background:linear-gradient(var(--fire),transparent);animation:hint 2.2s ease-in-out infinite}
 @keyframes hint{0%,100%{opacity:.2;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
@@ -262,7 +299,7 @@ section.block{position:relative;padding:clamp(80px,12vh,140px) clamp(20px,4vw,46
 .section-head p{color:var(--ink-dim);font-weight:400;font-size:18px}
 
 /* ─────────── LOCAȚIE ─────────── */
-#detalii{background:var(--bg-2)}
+#detalii{background:var(--band)}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,30px)}
 .detail-grid-one{grid-template-columns:minmax(0,560px);justify-content:center}
 .detail-card{
@@ -312,7 +349,7 @@ section.block{position:relative;padding:clamp(80px,12vh,140px) clamp(20px,4vw,46
   background:var(--card);display:flex;align-items:center;justify-content:center;margin-top:1px;
   transition:background .3s var(--ease),border-color .3s var(--ease),transform .3s var(--ease);
 }
-.agree .box svg{width:15px;height:15px;color:#1a0f02;opacity:0;transform:scale(.4);transition:opacity .25s,transform .25s var(--ease)}
+.agree .box svg{width:15px;height:15px;color:var(--accent-ink);opacity:0;transform:scale(.4);transition:opacity .25s,transform .25s var(--ease)}
 .agree input:checked + .box{background:var(--fire);border-color:var(--fire)}
 .agree input:checked + .box svg{opacity:1;transform:scale(1)}
 .agree input:focus-visible + .box{box-shadow:0 0 0 3px var(--ember)}
@@ -332,7 +369,7 @@ section.block{position:relative;padding:clamp(80px,12vh,140px) clamp(20px,4vw,46
 #enroll-btn[data-closed="true"]:hover{transform:none;box-shadow:none;background:#2a2a2e}
 
 /* ─────────── MISIUNE ─────────── */
-#misiune{background:var(--bg-2)}
+#misiune{background:var(--band)}
 .mis-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(36px,6vw,80px);align-items:center}
 .mis-left h2{font-size:clamp(30px,4.5vw,50px);margin-bottom:22px}
 .mis-left p{color:var(--ink-soft);font-weight:400;margin-bottom:18px}
@@ -405,7 +442,7 @@ section.block{position:relative;padding:clamp(80px,12vh,140px) clamp(20px,4vw,46
 .rule-note{max-width:820px;margin:34px auto 0;text-align:center;color:var(--ink-dim);font-size:14px}
 
 /* ═══════════════ FOOTER ═══════════════ */
-footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36px;background:var(--bg)}
+footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36px;background:var(--band)}
 .foot-grid{max-width:var(--max);margin:0 auto;display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:40px}
 .foot-brand{display:flex;align-items:center;margin-bottom:16px}
 .foot-brand img{height:34px;width:auto}
@@ -444,13 +481,24 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
 @media (max-width:560px){
   body{font-size:16px}
   .hero-inner{padding-bottom:120px}
-  .hero-poster{border-radius:14px;margin-bottom:24px}
+  .hero-frame{border-radius:14px}
+  .hero-slot{margin-bottom:24px}
   .scroll-hint{bottom:14px}
   /* 2 poze pe rand pe telefon: celulele devin ~jumatate, deci miniatura de
      600px se afiseaza clar (pe 1 coloana era marita ~2x → parea low-res). */
   .gallery-grid{grid-template-columns:1fr 1fr;gap:10px}
 }
+/* Ecran prea scund (telefon mic in portret, orice in peisaj): nu mai incape
+   nici afisul mic, nici textul, deci renuntam la efect si lasam pagina sa
+   curga normal. JS-ul vede ca scena nu mai e "sticky" si nu porneste. */
+@media (max-height:700px){
+  #hero{height:auto}
+  .hero-stage{position:static;height:auto;min-height:100svh}
+}
 @media (prefers-reduced-motion:reduce){
+  /* fara efectul de scroll, hero-ul e o sectiune normala de un ecran */
+  #hero{height:auto}
+  .hero-stage{position:static;height:auto;min-height:100svh}
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
   html{scroll-behavior:auto}
   .reveal{opacity:1;transform:none}
@@ -773,7 +821,7 @@ footer{border-top:1px solid var(--card-brd);padding:60px clamp(20px,4vw,46px) 36
 }
 .vz-optiune svg{width:18px;height:18px;flex:none;opacity:.8}
 .vz-optiune:hover{background:rgba(255,255,255,.11)}
-.vz-op-sterge{color:#ff9b8a}
+.vz-op-sterge{color:#ff8a93}
 .vz-op-sterge.vz-sigur{background:rgba(231,76,60,.22);color:#ffb0a2}
 
 /* ─── săgeți (doar desktop) ─── */

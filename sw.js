@@ -10,14 +10,14 @@
  * cache la edge; aici pastram doar fisierele site-ului.
  */
 
-const CACHE = 'riseup-v2';
+const CACHE = 'riseup-v3';
 
 // Fisierele de baza. Le adaugam individual (allSettled) ca un singur 404
 // sa nu strice instalarea service worker-ului.
 const COAJA = [
   '/', '/index.html', '/galerie.html', '/triburi.html', '/regulament.html',
   '/styles.css', '/main.js', '/manifest.webmanifest',
-  '/logo-dark.png', '/logo-light.png', '/favicon.png',
+  '/logo-dark.png', '/logo-light.png', '/favicon.png', '/in-his-presence.jpg',
   '/icons/icon-192.png', '/icons/icon-512.png',
   '/js/galerie.js', '/js/vizualizator.js', '/js/config.js', '/js/login-ascuns.js',
 ];

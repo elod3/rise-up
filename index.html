@@ -21,6 +21,10 @@
 </head>
 <body>
 
+<!-- Cerul cu stele: stă fix în spatele întregii pagini, așa că rămâne acolo
+     și după ce afișul din hero se face mare și dispare la scroll. -->
+<canvas id="stars" aria-hidden="true"></canvas>
+
 <!-- ═══════════ NAVBAR ═══════════ -->
 <nav id="nav" aria-label="Navigare principală">
   <a class="nav-brand" href="index.html" aria-label="Rise Up — acasă">
@@ -56,27 +60,38 @@
 <!-- ═══════════ HERO ═══════════ -->
 <header id="hero">
   <!-- ✏️ EDITEAZĂ — AFIȘUL EDIȚIEI:
-       Fundalul e aceeași imagine, doar neclară (ambianță). Ca să schimbi ediția,
-       înlocuiește fișierul "in-his-presence.jpg" sau pune altul și schimbă-i numele
-       în ambele <img> de mai jos (fundal + afiș). -->
-  <div class="hero-media" aria-hidden="true">
-    <img src="in-his-presence.jpg" alt="">
-  </div>
-  <canvas id="embers" aria-hidden="true"></canvas>
-  <div class="hero-veil"></div>
-  <div class="hero-inner">
-    <h1 class="sr-only">Rise Up — In His Presence</h1>
-    <img class="hero-poster" src="in-his-presence.jpg"
-         alt="In His Presence — Rise Up, 30 decembrie – 3 ianuarie, Liceul Integritas"
-         width="1600" height="900" fetchpriority="high">
-    <p class="hero-sub">O generație trezită de Dumnezeu. O armată care Îl înalță pe Cristos — în jurul focului, în natură, împreună.</p>
-    <span class="verse hero-verse">„Sculați-vă și străluciți, căci lumina voastră a venit." — Isaia 60:1</span>
-    <div class="hero-ctas">
-      <a class="btn btn-fire" href="index.html#detalii">Vezi detaliile</a>
-      <a class="btn btn-ghost" href="galerie">Galerie foto</a>
+       Acelaşi fişier apare de două ori: o dată neclar, ca fundal, şi o dată
+       clar, în ramă. Ca să schimbi ediţia, înlocuieşte "in-his-presence.jpg"
+       sau pune alt fişier şi schimbă-i numele în ambele <img>. -->
+  <div class="hero-stage">
+    <div class="hero-media" aria-hidden="true">
+      <img src="in-his-presence.jpg" alt="">
     </div>
+    <div class="hero-veil"></div>
+
+    <div class="hero-inner">
+      <h1 class="sr-only">Rise Up — In His Presence</h1>
+
+      <!-- Locul afişului. Rama din el creşte la scroll până umple ecranul,
+           iar locul rămâne gol ca restul textului să nu sară. -->
+      <div class="hero-slot">
+        <div class="hero-frame">
+          <img class="hero-poster" src="in-his-presence.jpg"
+               alt="In His Presence — Rise Up, 30 decembrie – 3 ianuarie, Liceul Integritas"
+               width="1600" height="900" fetchpriority="high">
+        </div>
+      </div>
+
+      <p class="hero-sub">O generație trezită de Dumnezeu. O armată care Îl înalță pe Cristos — în jurul focului, în natură, împreună.</p>
+      <span class="verse hero-verse">„Sculați-vă și străluciți, căci lumina voastră a venit." — Isaia 60:1</span>
+      <div class="hero-ctas">
+        <a class="btn btn-fire" href="index.html#detalii">Vezi detaliile</a>
+        <a class="btn btn-ghost" href="galerie">Galerie foto</a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">Coboară<i></i></div>
   </div>
-  <div class="scroll-hint">Coboară<i></i></div>
 </header>
 
 <!-- ═══════════ MISIUNE ═══════════ -->
@@ -129,7 +144,7 @@
         </a>
       </div>
 
-      <p class="cta-note" id="enroll-note">Înscrierile s-au încheiat. 🔥</p>
+      <p class="cta-note" id="enroll-note">Înscrierile s-au încheiat. ✨</p>
     </div>
   </div>
 </section>
